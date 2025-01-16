@@ -44,7 +44,7 @@ public class Post {
     @JoinColumn(name = "user_id", nullable = false)
     private User user;
 
-    @OneToMany(fetch = FetchType.EAGER)
+    @OneToMany(fetch = FetchType.EAGER, cascade = CascadeType.REMOVE, orphanRemoval = true)
     @JoinColumn(name = "post_id", nullable = false)
     private List<Comment> comments;
 }
