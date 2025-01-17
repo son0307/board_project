@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <link th:href="@{/css/bootstrap.min.css}" href="../css/bootstrap.min.css" rel="stylesheet">
+  <title>게시글 상세보기</title>
+</head>
+<body>
+<div class="container mt-5">
+  <h1 class="mb-4" th:text="${post.title}">제목</h1>
+  <div class="card mb-4">
+    <div class="card-body">
+      <p th:text="${post.content}">내용</p>
+      <p>조회수: <span th:text="${post.viewCount}">0</span></p>
+      <p>좋아요 수: <span th:text="${post.favCount}">0</span></p>
+      <p>작성 날짜: <span th:text="${#temporals.format(post.createdDate, 'yyyy-MM-dd HH:mm')}">날짜</span></p>
+    </div>
+  </div>
+
+  <h2 class="mb-3">댓글</h2>
+  <div th:each="comment : ${post.comments}">
+    <div class="card mb-3">
+      <div class="card-body">
+        <p th:text="${comment.content}">댓글 내용</p>
+        <p>작성자: <span th:text="${comment.user.nickname}">작성자</span></p>
+        <p>작성 날짜: <span th:text="${#temporals.format(comment.createdDate, 'yyyy-MM-dd HH:mm')}">날짜</span></p>
+        <p>좋아요 수: <span th:text="${comment.favCount}">0</span></p>
+      </div>
+    </div>
+  </div>
+
+  <a class="btn btn-primary" href="/">목록으로 돌아가기</a>
+</div>
+</body>
+</html>

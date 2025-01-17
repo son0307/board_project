@@ -11,6 +11,8 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
+
 @Slf4j
 @Service
 @RequiredArgsConstructor
@@ -49,10 +51,17 @@ public class PostService {
     }
 
     /* 게시글 삭제 */
+    @Transactional
     public void delete(int postId) {
         Post targetPost = postRepository.findById(postId)
                 .orElseThrow(() -> new IllegalArgumentException(postId + " : 게시글이 존재하지 않습니다."));
 
         postRepository.delete(targetPost);
+    }
+
+    /* 게시물 리스트 호출 */
+    @Transactional
+    public List<Post> getAllPosts() {
+        return postRepository.findAll();
     }
 }

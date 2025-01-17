@@ -27,7 +27,7 @@ public class Comment {
 
     @Column(nullable = false)
     @Builder.Default
-    private int fav_count = 0;
+    private int favCount = 0;
 
     @Column(name = "created_date", nullable = false)
     private LocalDateTime createdDate;
