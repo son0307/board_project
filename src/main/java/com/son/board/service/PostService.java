@@ -3,14 +3,13 @@ package com.son.board.service;
 import com.son.board.domain.Post;
 import com.son.board.domain.User;
 import com.son.board.dto.PostRequestDto;
+import com.son.board.dto.PostResponseDto;
 import com.son.board.repository.PostRepository;
 import com.son.board.repository.UserRepository;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
-
-import java.util.Optional;
 
 @Slf4j
 @Service
@@ -22,19 +21,38 @@ public class PostService {
 
     /* 게시글 추가 */
     @Transactional
-    public Integer save(PostRequestDto postRequestDto, int userId) {
-        Optional<User> user = userRepository.findById(userId);
+    public void save(PostRequestDto request, int userId) {
+        User user = userRepository.findById(userId)
+                .orElseThrow(() -> new IllegalArgumentException("사용자 id 정보가 없습니다."));
 
-        if(user.isEmpty()) {
-            throw new IllegalStateException("사용자 id 정보가 없습니다.");
-        }
-
-        postRequestDto.setUser(user.get());
-        Post newPost = postRequestDto.toPostEntity();
+        request.setUser(user);
+        Post newPost = request.toPostEntity();
         postRepository.save(newPost);
-
-        return newPost.getId();
     }
 
-    /* 게시글 목록 조회 */
+    /* 게시글 조회 */
+    @Transactional
+    public PostResponseDto find(int postId) {
+        Post targetPost = postRepository.findById(postId)
+                .orElseThrow(() -> new IllegalArgumentException(postId + " : 게시글이 존재하지 않습니다."));
+
+        return new PostResponseDto(targetPost);
+    }
+
+    /* 게시글 수정 */
+    @Transactional
+    public void update(PostRequestDto request, int postId) {
+        Post targetPost = postRepository.findById(postId)
+                .orElseThrow(() -> new IllegalArgumentException(postId + " : 게시글이 존재하지 않습니다."));
+
+        targetPost.update(request.getTitle(), request.getContent());
+    }
+
+    /* 게시글 삭제 */
+    public void delete(int postId) {
+        Post targetPost = postRepository.findById(postId)
+                .orElseThrow(() -> new IllegalArgumentException(postId + " : 게시글이 존재하지 않습니다."));
+
+        postRepository.delete(targetPost);
+    }
 }

@@ -47,4 +47,10 @@ public class Post {
     @OneToMany(fetch = FetchType.EAGER, cascade = CascadeType.REMOVE, orphanRemoval = true)
     @JoinColumn(name = "post_id", nullable = false)
     private List<Comment> comments;
+
+    public void update(String title, String content) {
+        this.title = title;
+        this.content = content;
+        this.modifiedDate = LocalDateTime.now();
+    }
 }

@@ -9,19 +9,19 @@ import lombok.NoArgsConstructor;
 
 import java.time.LocalDateTime;
 
-/* 등록, 수정 처리용 dto */
+/* 게시글 등록, 수정 처리용 dto */
 @Data
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
 public class PostRequestDto {
-    String title;
-    String content;
-    int viewCount;
-    int favCount;
-    LocalDateTime createdDate;
-    LocalDateTime modifiedDate;
-    User user;
+    private String title;
+    private String content;
+    private int viewCount;
+    private int favCount;
+    private LocalDateTime createdDate;
+    private LocalDateTime modifiedDate;
+    private User user;
 
     public Post toPostEntity() {
         Post newPost = Post.builder()

@@ -29,6 +29,7 @@ public class PostRepositoryTest {
         userRepository.deleteAll();
     }
 
+    /* repository 저장 작동 테스트 */
     @Test
     public void saveAndLoadTest() {
         // given
