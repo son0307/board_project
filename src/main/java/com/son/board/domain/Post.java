@@ -7,6 +7,7 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 
 import java.time.LocalDateTime;
+import java.util.ArrayList;
 import java.util.List;
 
 @Entity
@@ -35,10 +36,12 @@ public class Post {
     private int favCount = 0;
 
     @Column(name = "create_date", nullable = false)
-    private LocalDateTime createdDate;
+    @Builder.Default
+    private LocalDateTime createdDate = LocalDateTime.of(2025, 1, 1, 0, 0, 0);
 
     @Column(name = "modified_date", nullable = false)
-    private LocalDateTime modifiedDate;
+    @Builder.Default
+    private LocalDateTime modifiedDate = LocalDateTime.of(2025, 1, 1, 0, 0, 0);
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "user_id", nullable = false)
@@ -46,7 +49,8 @@ public class Post {
 
     @OneToMany(fetch = FetchType.EAGER, cascade = CascadeType.REMOVE, orphanRemoval = true)
     @JoinColumn(name = "post_id", nullable = false)
-    private List<Comment> comments;
+    @Builder.Default
+    private List<Comment> comments = new ArrayList<>();
 
     public void update(String title, String content) {
         this.title = title;

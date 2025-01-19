@@ -64,7 +64,7 @@ public class PostServiceTest {
         userRepository.save(user);
 
         // when
-        postService.save(postRequestDto, user.getId());
+        postService.savePost(postRequestDto, user.getId());
 
         // then
         Post savedPost = postRepository.findAll().get(0);
@@ -90,10 +90,10 @@ public class PostServiceTest {
                 .build();
 
         userRepository.save(user);
-        postService.save(postRequestDto, user.getId());
+        postService.savePost(postRequestDto, user.getId());
 
         // when
-        PostResponseDto reqPost = postService.find(1);
+        PostResponseDto reqPost = postService.findPost(1);
 
         // then
         Assertions.assertThat(reqPost.getTitle()).isEqualTo(postRequestDto.getTitle());
@@ -118,8 +118,7 @@ public class PostServiceTest {
                 .build();
 
         userRepository.save(user);
-        postService.save(postRequestDto, user.getId());
-        System.out.println("유저, 포스트 저장 완료");
+        postService.savePost(postRequestDto, user.getId());
 
         // when
         PostRequestDto updatedPostRequestDto = PostRequestDto.builder()
@@ -129,10 +128,10 @@ public class PostServiceTest {
                 .modifiedDate(LocalDateTime.now())
                 .build();
 
-        postService.update(updatedPostRequestDto, 1);
+        postService.updatePost(updatedPostRequestDto, 1);
 
         // then
-        String updatedTitle = postService.find(1).getTitle();
+        String updatedTitle = postService.findPost(1).getTitle();
         Assertions.assertThat(updatedTitle).isEqualTo(updatedPostRequestDto.getTitle());
     }
 
@@ -155,13 +154,12 @@ public class PostServiceTest {
                 .build();
 
         userRepository.save(user);
-        postService.save(postRequestDto, user.getId());
+        postService.savePost(postRequestDto, user.getId());
 
         // when
-        postService.delete(1);
+        postService.deletePost(1);
 
         // then
         Assertions.assertThat(postRepository.findAll().size()).isEqualTo(0);
     }
-
 }

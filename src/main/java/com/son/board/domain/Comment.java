@@ -30,10 +30,12 @@ public class Comment {
     private int favCount = 0;
 
     @Column(name = "created_date", nullable = false)
-    private LocalDateTime createdDate;
+    @Builder.Default
+    private LocalDateTime createdDate = LocalDateTime.of(2025, 1, 1, 0, 0, 0);
 
     @Column(name = "modified_date", nullable = false)
-    private LocalDateTime modifiedDate;
+    @Builder.Default
+    private LocalDateTime modifiedDate = LocalDateTime.of(2025, 1, 1, 0, 0, 0);
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "user_id", nullable = false)

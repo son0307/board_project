@@ -30,7 +30,7 @@ public class PostController {
 
     @GetMapping("/{id}")
     public String post(@PathVariable int id, Model model) {
-        PostResponseDto target = postService.find(id);
+        PostResponseDto target = postService.findPost(id);
 
         model.addAttribute("post", target);
 

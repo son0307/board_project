@@ -23,41 +23,45 @@ public class PostService {
 
     /* 게시글 추가 */
     @Transactional
-    public void save(PostRequestDto request, int userId) {
-        User user = userRepository.findById(userId)
-                .orElseThrow(() -> new IllegalArgumentException("사용자 id 정보가 없습니다."));
+    public void savePost(PostRequestDto request, int userId) {
+        User writer = userRepository.findById(userId)
+                .orElseThrow(() -> new IllegalArgumentException("사용자 정보가 없습니다."));
 
-        request.setUser(user);
+        request.setUser(writer);
         Post newPost = request.toPostEntity();
         postRepository.save(newPost);
+        log.debug("title : {}, userId : {} 등록", request.getTitle(), userId);
     }
 
     /* 게시글 조회 */
     // 조회 성능을 개선하기 위해 readOnly 옵션을 true로 설정
     @Transactional(readOnly = true)
-    public PostResponseDto find(int postId) {
+    public PostResponseDto findPost(int postId) {
         Post targetPost = postRepository.findById(postId)
                 .orElseThrow(() -> new IllegalArgumentException(postId + " : 게시글이 존재하지 않습니다."));
 
+        log.debug("postId : {} 조회", postId);
         return new PostResponseDto(targetPost);
     }
 
     /* 게시글 수정 */
     @Transactional
-    public void update(PostRequestDto request, int postId) {
+    public void updatePost(PostRequestDto request, int postId) {
         Post targetPost = postRepository.findById(postId)
                 .orElseThrow(() -> new IllegalArgumentException(postId + " : 게시글이 존재하지 않습니다."));
 
         targetPost.update(request.getTitle(), request.getContent());
+        log.debug("postId : {} 수정", postId);
     }
 
     /* 게시글 삭제 */
     @Transactional
-    public void delete(int postId) {
+    public void deletePost(int postId) {
         Post targetPost = postRepository.findById(postId)
                 .orElseThrow(() -> new IllegalArgumentException(postId + " : 게시글이 존재하지 않습니다."));
 
         postRepository.delete(targetPost);
+        log.debug("postId : {} 삭제", postId);
     }
 
     /* 게시물 리스트 호출 */
