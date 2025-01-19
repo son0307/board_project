@@ -6,7 +6,7 @@ import com.son.board.dto.PostRequestDto;
 import com.son.board.dto.PostResponseDto;
 import com.son.board.repository.PostRepository;
 import com.son.board.repository.UserRepository;
-import jakarta.transaction.Transactional;
+import org.springframework.transaction.annotation.Transactional;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
@@ -33,7 +33,8 @@ public class PostService {
     }
 
     /* 게시글 조회 */
-    @Transactional
+    // 조회 성능을 개선하기 위해 readOnly 옵션을 true로 설정
+    @Transactional(readOnly = true)
     public PostResponseDto find(int postId) {
         Post targetPost = postRepository.findById(postId)
                 .orElseThrow(() -> new IllegalArgumentException(postId + " : 게시글이 존재하지 않습니다."));
@@ -60,7 +61,8 @@ public class PostService {
     }
 
     /* 게시물 리스트 호출 */
-    @Transactional
+    // 조회 성능을 개선하기 위해 readOnly 옵션을 true로 설정
+    @Transactional (readOnly = true)
     public List<Post> getAllPosts() {
         return postRepository.findAll();
     }

@@ -1,6 +1,5 @@
 package com.son.board.controller;
 
-import com.son.board.domain.Comment;
 import com.son.board.domain.Post;
 import com.son.board.dto.PostResponseDto;
 import com.son.board.service.PostService;
@@ -35,6 +34,6 @@ public class PostController {
 
         model.addAttribute("post", target);
 
-        return "post/read";
+        return "detail";
     }
 }
