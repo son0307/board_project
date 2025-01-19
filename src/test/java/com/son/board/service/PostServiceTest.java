@@ -34,10 +34,6 @@ public class PostServiceTest {
 
     @BeforeEach
     public void reset() {
-        postRepository.deleteAll();
-        userRepository.deleteAll();
-        System.out.println("DB 초기화 완료");
-
         entityManager.createNativeQuery("ALTER TABLE post AUTO_INCREMENT = 1").executeUpdate();
         entityManager.createNativeQuery("ALTER TABLE user AUTO_INCREMENT = 1").executeUpdate();
         System.out.println("auto_increment 초기화 완료");

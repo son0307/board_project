@@ -30,7 +30,7 @@ public class PostService {
         request.setUser(writer);
         Post newPost = request.toPostEntity();
         postRepository.save(newPost);
-        log.debug("title : {}, userId : {} 등록", request.getTitle(), userId);
+        log.info("title : {}, userId : {} 등록", request.getTitle(), userId);
     }
 
     /* 게시글 조회 */
@@ -40,7 +40,7 @@ public class PostService {
         Post targetPost = postRepository.findById(postId)
                 .orElseThrow(() -> new IllegalArgumentException(postId + " : 게시글이 존재하지 않습니다."));
 
-        log.debug("postId : {} 조회", postId);
+        log.info("postId : {} 조회", postId);
         return new PostResponseDto(targetPost);
     }
 
@@ -51,7 +51,7 @@ public class PostService {
                 .orElseThrow(() -> new IllegalArgumentException(postId + " : 게시글이 존재하지 않습니다."));
 
         targetPost.update(request.getTitle(), request.getContent());
-        log.debug("postId : {} 수정", postId);
+        log.info("postId : {} 수정", postId);
     }
 
     /* 게시글 삭제 */
@@ -61,7 +61,7 @@ public class PostService {
                 .orElseThrow(() -> new IllegalArgumentException(postId + " : 게시글이 존재하지 않습니다."));
 
         postRepository.delete(targetPost);
-        log.debug("postId : {} 삭제", postId);
+        log.info("postId : {} 삭제", postId);
     }
 
     /* 게시물 리스트 호출 */

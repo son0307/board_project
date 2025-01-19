@@ -17,6 +17,7 @@ import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDateTime;
+import java.util.List;
 
 @Transactional
 @SpringBootTest
@@ -42,11 +43,6 @@ public class CommentServiceTest {
 
     @BeforeEach
     public void reset() {
-        postRepository.deleteAll();
-        userRepository.deleteAll();
-        commentRepository.deleteAll();
-        System.out.println("DB 초기화 완료");
-
         entityManager.createNativeQuery("ALTER TABLE post AUTO_INCREMENT = 1").executeUpdate();
         entityManager.createNativeQuery("ALTER TABLE user AUTO_INCREMENT = 1").executeUpdate();
         entityManager.createNativeQuery("ALTER TABLE comment AUTO_INCREMENT = 1").executeUpdate();
@@ -70,6 +66,7 @@ public class CommentServiceTest {
         postService.savePost(postRequestDto, user.getId());
     }
 
+    /* 댓글 등록 테스트 */
     @Test
     public void saveTest() {
         // given
@@ -87,5 +84,64 @@ public class CommentServiceTest {
         PostResponseDto targetPost = postService.findPost(1);
         Comment targetComment = targetPost.getComments().get(0);
         Assertions.assertThat(targetComment.getContent()).isEqualTo(comment.getContent());
+    }
+
+    /* 댓글 수정 테스트 */
+    @Test
+    public void updateTest() {
+        // given
+        CommentRequestDto comment = CommentRequestDto.builder()
+                .content("댓글1")
+                .path("")
+                .createdDate(LocalDateTime.now())
+                .modifiedDate(LocalDateTime.now())
+                .build();
+
+        commentService.saveComment(comment, 1, 1);
+
+        // when
+        CommentRequestDto updatedComment = CommentRequestDto.builder()
+                .content("변경된 댓글1")
+                .path("")
+                .createdDate(comment.getCreatedDate())
+                .modifiedDate(comment.getModifiedDate())
+                .build();
+
+        commentService.updateComment(updatedComment, 1);
+
+        // then
+        PostResponseDto targetPost = postService.findPost(1);
+        Comment targetComment = targetPost.getComments().get(0);
+        Assertions.assertThat(targetComment.getContent()).isEqualTo(updatedComment.getContent());
+    }
+
+    /* 댓글 삭제 테스트 */
+    @Test
+    public void deleteTest() {
+        // given
+        CommentRequestDto comment1 = CommentRequestDto.builder()
+                .content("댓글1")
+                .path("")
+                .createdDate(LocalDateTime.now())
+                .modifiedDate(LocalDateTime.now())
+                .build();
+
+        CommentRequestDto comment2 = CommentRequestDto.builder()
+                .content("댓글2")
+                .path("")
+                .createdDate(LocalDateTime.now())
+                .modifiedDate(LocalDateTime.now())
+                .build();
+
+        commentService.saveComment(comment1, 1, 1);
+        commentService.saveComment(comment2, 1, 1);
+
+        // when
+        commentService.deleteComment(1);
+
+        // then
+        PostResponseDto targetPost = postService.findPost(1);
+        List<Comment> comments = targetPost.getComments();
+        Assertions.assertThat(comments.get(0).getContent()).isEqualTo("[삭제된 댓글입니다.]");
     }
 }
