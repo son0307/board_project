@@ -1,30 +1,110 @@
-<!DOCTYPE HTML>
+<!DOCTYPE html>
 <html xmlns:th="http://www.thymeleaf.org">
 <head>
-    <meta charset="utf-8">
-    <link th:href="@{/css/bootstrap.min.css}" href="../css/bootstrap.min.css" rel="stylesheet">
-    <title>게시판</title>
+    <meta charset="UTF-8">
+    <title>Board Service</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+        }
+        .header {
+            background-color: #87CEFA;
+            padding: 20px;
+            text-align: center;
+            font-size: 24px;
+            color: white;
+        }
+        .search-bar {
+            margin: 20px auto;
+            text-align: center;
+        }
+        .search-bar input[type="text"] {
+            width: 300px;
+            padding: 10px;
+            font-size: 16px;
+        }
+        .search-bar button {
+            padding: 10px 20px;
+            font-size: 16px;
+            background-color: #4CAF50;
+            color: white;
+            border: none;
+            cursor: pointer;
+        }
+        .table-container {
+            margin: 20px auto;
+            width: 80%;
+        }
+        table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+        table, th, td {
+            border: 1px solid #ddd;
+        }
+        th, td {
+            padding: 10px;
+            text-align: left;
+        }
+        th {
+            background-color: #f2f2f2;
+        }
+        .pagination {
+            margin: 20px auto;
+            text-align: center;
+        }
+        .pagination button {
+            padding: 10px 15px;
+            font-size: 16px;
+            border: 1px solid #ddd;
+            background-color: #f9f9f9;
+            cursor: pointer;
+        }
+        .pagination button:hover {
+            background-color: #ddd;
+        }
+        .write-button {
+            display: block;
+            margin: 20px auto;
+            padding: 10px 20px;
+            font-size: 16px;
+            background-color: #4CAF50;
+            color: white;
+            border: none;
+            cursor: pointer;
+            text-align: center;
+        }
+    </style>
 </head>
 <body>
-<div class="container mt-4">
-    <h1 class="mb-4">게시판</h1>
-
-    <table class="table table-striped">
+<div class="header">
+    게시판
+</div>
+<div class="search-bar">
+    <input type="text" placeholder="검색">
+    <button>검색</button>
+</div>
+<div class="table-container">
+    <table>
         <thead>
         <tr>
-            <th scope="col">번호</th>
-            <th scope="col">제목</th>
-            <th scope="col">작성자</th>
-            <th scope="col">작성일</th>
-            <th scope="col">조회수</th>
-            <th scope="col">좋아요</th>
+            <th>번호</th>
+            <th>제목</th>
+            <th>작성자</th>
+            <th>등록일</th>
+            <th>조회수</th>
+            <th>좋아요</th>
         </tr>
         </thead>
         <tbody>
-        <!-- 게시글 리스트 반복 출력 -->
-        <tr th:each="post, iterStat : ${posts}">
-            <th scope="row" th:text="${iterStat.index + 1}"></th>
-            <td><a th:href="@{/{id}(id=${post.id})}" th:text="${post.title}"></a></td>
+        <!-- Example Rows -->
+        <tr th:each="post : ${posts}">
+            <td th:text="${post.id}"></td>
+            <td>
+                <a th:href="@{/{id}(id=${post.id})}" th:text="${post.title}"></a>
+            </td>
             <td th:text="${post.user.nickname}"></td>
             <td th:text="${#temporals.format(post.createdDate, 'yyyy-MM-dd HH:mm:ss')}"></td>
             <td th:text="${post.viewCount}"></td>
@@ -33,5 +113,38 @@
         </tbody>
     </table>
 </div>
+<div class="pagination">
+    <!-- 이전 버튼 -->
+    <button
+            th:classappend="${page <= 1} ? 'disabled' : ''"
+            th:onclick="|location.href='?page=${page - 1}'|"
+            th:disabled="${page <= 1}">
+        이전
+    </button>
+
+    <!-- 페이지 번호 출력 -->
+    <span th:each="i : ${#numbers.sequence(startPage, lastPage)}">
+        <!-- 현재 페이지 -->
+        <span th:if="${i == page}"
+              th:text="${i}"
+              class="current-page"
+              style="margin: 0 5px; font-weight: bold; color: gray;"></span>
+        <!-- 다른 페이지 -->
+        <a th:if="${i != page}"
+           th:href="|?page=${i}|"
+           th:text="${i}"
+           style="margin: 0 5px; text-decoration: none;"></a>
+    </span>
+
+    <!-- 다음 버튼 -->
+    <button
+            th:classappend="${!hasNext} ? 'disabled' : ''"
+            th:onclick="|location.href='?page=${page + 1}'|"
+            th:disabled="${!hasNext}">
+        다음
+    </button>
+</div>
+<button class="write-button">글쓰기</button>
 </body>
+</html>
 </html>

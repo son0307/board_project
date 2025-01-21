@@ -6,6 +6,8 @@ import com.son.board.dto.PostRequestDto;
 import com.son.board.dto.PostResponseDto;
 import com.son.board.repository.PostRepository;
 import com.son.board.repository.UserRepository;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.transaction.annotation.Transactional;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -67,7 +69,7 @@ public class PostService {
     /* 게시물 리스트 호출 */
     // 조회 성능을 개선하기 위해 readOnly 옵션을 true로 설정
     @Transactional (readOnly = true)
-    public List<Post> getAllPosts() {
-        return postRepository.findAll();
+    public Page<Post> getAllPosts(Pageable pageable) {
+        return postRepository.findAll(pageable);
     }
 }
