@@ -68,8 +68,15 @@ public class PostService {
 
     /* 게시물 리스트 호출 */
     // 조회 성능을 개선하기 위해 readOnly 옵션을 true로 설정
-    @Transactional (readOnly = true)
+    @Transactional(readOnly = true)
     public Page<Post> getAllPosts(Pageable pageable) {
         return postRepository.findAll(pageable);
+    }
+
+    /* 게시물 검색 */
+    // 조회 성능을 개선하기 위해 readOnly 옵션을 true로 설정
+    @Transactional(readOnly = true)
+    public Page<Post> searchByTitle(String keyword, Pageable pageable) {
+        return postRepository.findByTitleContaining(keyword, pageable);
     }
 }

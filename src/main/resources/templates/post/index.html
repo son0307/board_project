@@ -4,14 +4,15 @@
     <meta charset="UTF-8">
     <title>Board Service</title>
     <link rel="stylesheet" type="text/css" th:href="@{/css/index.css}">
+    <script src="/script/index.js" defer></script>
 </head>
 <body>
 <div class="header">
     게시판
 </div>
 <div class="search-bar">
-    <input type="text" placeholder="검색">
-    <button>검색</button>
+    <input id="keyword-input" type="text" placeholder="검색">
+    <button id="search-button">검색</button>
 </div>
 <div class="table-container">
     <table>
@@ -44,7 +45,7 @@
     <!-- 이전 버튼 -->
     <button
             th:classappend="${page <= 1} ? 'disabled' : ''"
-            th:onclick="|location.href='?page=${page - 1}'|"
+            th:onclick="|handlePreviousPage(${page})|"
             th:disabled="${page <= 1}">
         이전
     </button>
@@ -58,7 +59,8 @@
               style="margin: 0 5px; font-weight: bold; color: gray;"></span>
         <!-- 다른 페이지 -->
         <a th:if="${i != page}"
-           th:href="|?page=${i}|"
+           th:href="|javascript:void(0);|"
+           th:onclick="|handlePageNumber(${i})|"
            th:text="${i}"
            style="margin: 0 5px; text-decoration: none;"></a>
     </span>
@@ -66,7 +68,7 @@
     <!-- 다음 버튼 -->
     <button
             th:classappend="${!hasNext} ? 'disabled' : ''"
-            th:onclick="|location.href='?page=${page + 1}'|"
+            th:onclick="|handleNextPage(${page})|"
             th:disabled="${!hasNext}">
         다음
     </button>

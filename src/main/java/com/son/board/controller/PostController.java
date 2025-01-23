@@ -29,16 +29,26 @@ public class PostController {
     private final PostService postService;
     private final UserService userService;
 
-    /* 페이지 id를 기준으로 내림차순으로 정렬, 한 페이지당 게시글 개수 10개 */
+    /*
+        게시글 리스트 출력
+        페이지 id를 기준으로 내림차순으로 정렬, 한 페이지당 게시글 개수 10개
+    */
     @GetMapping("/")
-    public String list(Model model, @RequestParam(defaultValue = "1") int page,
+    public String list(Model model,
+                       @RequestParam(defaultValue = "1") int page,
+                       @RequestParam(defaultValue = "") String keyword,
                        @PageableDefault(sort = "id", direction = Sort.Direction.DESC)Pageable pageable) {
         // Spring에서는 0부터 시작하므로 -1 처리
         Pageable modifiedPageable = PageRequest.of(page - 1, pageable.getPageSize(), pageable.getSort());
-        Page<Post> posts = postService.getAllPosts(modifiedPageable);
+        Page<Post> posts;
+
+        if(keyword.isBlank())
+            posts = postService.getAllPosts(modifiedPageable);
+        else
+            posts = postService.searchByTitle(keyword, modifiedPageable);
 
         int startPage = Math.max(1, page - 2);
-        int lastPage = Math.min(posts.getTotalPages(), page + 2);
+        int lastPage = Math.max(1, Math.min(posts.getTotalPages(), page + 2));
 
         model.addAttribute("posts", posts);
         model.addAttribute("page", page);
@@ -49,6 +59,7 @@ public class PostController {
         return "post/index";
     }
 
+    /* 게시글 상세정보 조회 */
     @GetMapping("/{id}")
     public String post(@PathVariable int id, Model model) {
         PostResponseDto target = postService.findPost(id);
