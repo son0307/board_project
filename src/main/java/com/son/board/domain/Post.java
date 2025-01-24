@@ -36,12 +36,10 @@ public class Post {
     private int favCount = 0;
 
     @Column(name = "create_date", nullable = false)
-    @Builder.Default
-    private LocalDateTime createdDate = LocalDateTime.of(2025, 1, 1, 0, 0, 0);
+    private LocalDateTime createdDate;
 
     @Column(name = "modified_date", nullable = false)
-    @Builder.Default
-    private LocalDateTime modifiedDate = LocalDateTime.of(2025, 1, 1, 0, 0, 0);
+    private LocalDateTime modifiedDate;
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "user_id", nullable = false)
