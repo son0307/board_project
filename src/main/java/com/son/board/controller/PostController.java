@@ -13,13 +13,13 @@ import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.data.web.PageableDefault;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.*;
 
 import java.time.LocalDateTime;
+import java.util.Map;
 
 @Controller
 @Slf4j
@@ -67,6 +67,21 @@ public class PostController {
         model.addAttribute("post", target);
 
         return "post/detail";
+    }
+
+    /* 글쓰기 페이지로 이동 */
+    @GetMapping("/write")
+    public String write() {
+        return "post/write";
+    }
+
+    /* 새로운 글 등록 */
+    @PostMapping("/register")
+    public ResponseEntity<?> register(@RequestBody PostRequestDto postRequestDto) {
+        // 임시로 userId 설정하고 등록처리
+        postService.savePost(postRequestDto, 1);
+
+        return ResponseEntity.ok(Map.of("message", "게시글이 등록되었습니다."));
     }
 
     @GetMapping("/addData")

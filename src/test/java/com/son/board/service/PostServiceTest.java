@@ -53,8 +53,6 @@ public class PostServiceTest {
         PostRequestDto postRequestDto = PostRequestDto.builder()
                             .title("제목1")
                             .content("내용1")
-                            .createdDate(LocalDateTime.now())
-                            .modifiedDate(LocalDateTime.now())
                             .build();
 
         userRepository.save(user);

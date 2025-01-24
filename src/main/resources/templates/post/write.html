@@ -1,0 +1,28 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Board Service</title>
+    <link rel="stylesheet" type="text/css" th:href="@{/css/write.css}">
+    <script src="/script/write.js" defer></script>
+</head>
+<body>
+    <div class="header">
+        게시판
+    </div>
+    <div class="write-detail">
+        <h1>게시글 등록</h1>
+        <form id="form">
+            <div class="write-title">
+                <label for="title">제목</label><br>
+                <input type="text" id="title" name="title">
+            </div>
+            <div class="write-content">
+                <label for="content">내용</label><br>
+                <textarea id="content" name="content" rows="10" cols="100"></textarea>
+            </div>
+            <button class="submit-button" type="submit">게시글 등록</button>
+        </form>
+    </div>
+</body>
+</html>

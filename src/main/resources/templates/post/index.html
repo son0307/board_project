@@ -7,72 +7,72 @@
     <script src="/script/index.js" defer></script>
 </head>
 <body>
-<div class="header">
-    게시판
-</div>
-<div class="search-bar">
-    <input id="keyword-input" type="text" placeholder="검색">
-    <button id="search-button">검색</button>
-</div>
-<div class="table-container">
-    <table>
-        <thead>
-        <tr>
-            <th>번호</th>
-            <th>제목</th>
-            <th>작성자</th>
-            <th>등록일</th>
-            <th>조회수</th>
-            <th>좋아요</th>
-        </tr>
-        </thead>
-        <tbody>
-        <!-- Example Rows -->
-        <tr th:each="post : ${posts}">
-            <td th:text="${post.id}"></td>
-            <td>
-                <a th:href="@{/{id}(id=${post.id})}" th:text="${post.title}"></a>
-            </td>
-            <td th:text="${post.user.nickname}"></td>
-            <td th:text="${#temporals.format(post.createdDate, 'yyyy-MM-dd HH:mm:ss')}"></td>
-            <td th:text="${post.viewCount}"></td>
-            <td th:text="${post.favCount}"></td>
-        </tr>
-        </tbody>
-    </table>
-</div>
-<div class="pagination">
-    <!-- 이전 버튼 -->
-    <button
-            th:classappend="${page <= 1} ? 'disabled' : ''"
-            th:onclick="|handlePreviousPage(${page})|"
-            th:disabled="${page <= 1}">
-        이전
-    </button>
+    <div class="header">
+        게시판
+    </div>
+    <div class="search-bar">
+        <input id="keyword-input" type="text" placeholder="검색">
+        <button id="search-button">검색</button>
+    </div>
+    <div class="table-container">
+        <table>
+            <thead>
+            <tr>
+                <th>번호</th>
+                <th>제목</th>
+                <th>작성자</th>
+                <th>등록일</th>
+                <th>조회수</th>
+                <th>좋아요</th>
+            </tr>
+            </thead>
+            <tbody>
+            <!-- Example Rows -->
+            <tr th:each="post : ${posts}">
+                <td th:text="${post.id}"></td>
+                <td>
+                    <a th:href="@{/{id}(id=${post.id})}" th:text="${post.title}"></a>
+                </td>
+                <td th:text="${post.user.nickname}"></td>
+                <td th:text="${#temporals.format(post.createdDate, 'yyyy-MM-dd HH:mm:ss')}"></td>
+                <td th:text="${post.viewCount}"></td>
+                <td th:text="${post.favCount}"></td>
+            </tr>
+            </tbody>
+        </table>
+    </div>
+    <div class="pagination">
+        <!-- 이전 버튼 -->
+        <button
+                th:classappend="${page <= 1} ? 'disabled' : ''"
+                th:onclick="|handlePreviousPage(${page})|"
+                th:disabled="${page <= 1}">
+            이전
+        </button>
 
-    <!-- 페이지 번호 출력 -->
-    <span th:each="i : ${#numbers.sequence(startPage, lastPage)}">
-        <!-- 현재 페이지 -->
-        <span th:if="${i == page}"
-              th:text="${i}"
-              class="current-page"
-              style="margin: 0 5px; font-weight: bold; color: gray;"></span>
-        <!-- 다른 페이지 -->
-        <a th:if="${i != page}"
-           th:href="|javascript:void(0);|"
-           th:onclick="|handlePageNumber(${i})|"
-           th:text="${i}"
-           style="margin: 0 5px; text-decoration: none;"></a>
-    </span>
+        <!-- 페이지 번호 출력 -->
+        <span th:each="i : ${#numbers.sequence(startPage, lastPage)}">
+            <!-- 현재 페이지 -->
+            <span th:if="${i == page}"
+                  th:text="${i}"
+                  class="current-page"
+                  style="margin: 0 5px; font-weight: bold; color: gray;"></span>
+            <!-- 다른 페이지 -->
+            <a th:if="${i != page}"
+               th:href="|javascript:void(0);|"
+               th:onclick="|handlePageNumber(${i})|"
+               th:text="${i}"
+               style="margin: 0 5px; text-decoration: none;"></a>
+        </span>
 
-    <!-- 다음 버튼 -->
-    <button
-            th:classappend="${!hasNext} ? 'disabled' : ''"
-            th:onclick="|handleNextPage(${page})|"
-            th:disabled="${!hasNext}">
-        다음
-    </button>
-</div>
-<button class="write-button">글쓰기</button>
+        <!-- 다음 버튼 -->
+        <button
+                th:classappend="${!hasNext} ? 'disabled' : ''"
+                th:onclick="|handleNextPage(${page})|"
+                th:disabled="${!hasNext}">
+            다음
+        </button>
+    </div>
+    <button class="write-button" onclick="location.href='http://localhost:8080/write'">글쓰기</button>
 </body>
 </html>

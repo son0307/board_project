@@ -8,6 +8,7 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 
 import java.time.LocalDateTime;
+import java.util.Objects;
 
 /* 게시글 등록, 수정 처리용 dto */
 @Data
@@ -24,6 +25,11 @@ public class PostRequestDto {
     private User user;
 
     public Post toPostEntity() {
+        if(Objects.isNull(createdDate)) {
+            this.createdDate = LocalDateTime.now();
+        }
+        this.modifiedDate = LocalDateTime.now();
+
         Post newPost = Post.builder()
                 .title(title)
                 .content(content)
