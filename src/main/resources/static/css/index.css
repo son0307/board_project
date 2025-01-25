@@ -27,6 +27,16 @@ body {
     border: none;
     cursor: pointer;
 }
+
+.search-bar button:hover {
+    background-color: #45a049;
+}
+
+.search-bar button:active {
+    background-color: #3e8e41;
+    transform: translateY(1px);
+}
+
 .table-container {
     margin: 20px auto;
     width: 80%;

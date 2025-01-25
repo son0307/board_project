@@ -21,6 +21,14 @@ body {
     cursor: pointer;
     text-align: center;
 }
+.submit-button:hover {
+    background-color: #45a049;
+}
+
+.submit-button:active {
+    background-color: #3e8e41;
+    transform: translateY(1px);
+}
 
 .write-detail {
     max-width: 800px;

@@ -4,50 +4,57 @@
     <meta charset="UTF-8">
     <title>Board Service</title>
     <link rel="stylesheet" type="text/css" th:href="@{/css/detail.css}">
+    <script src="/script/detail.js" defer> </script>
 </head>
 <body>
-<div class="header">
-  게시판
-</div>
-
-<div class="post-detail">
-  <!-- 제목 섹션 -->
-  <div class="post-header">
-    <h2 th:text="${post.title}"></h2>
-    <div class="post-meta">
-      <span class="post-nickname" th:text="${post.user.nickname}"></span>
-      <span class="post-dates"
-            th:text="'작성일 ' + ${#temporals.format(post.createdDate, 'yyyy-MM-dd HH:mm:ss')} + ' | 수정일 ' + ${#temporals.format(post.modifiedDate, 'yyyy-MM-dd HH:mm:ss')}"></span>
-    </div>
+  <div class="header">
+    게시판
   </div>
 
-  <!-- 추가 정보 섹션 -->
-  <div class="post-info">
-    <div>
-      조회수 <span th:text="${post.viewCount}"></span> |
-      좋아요 <span th:text="${post.favCount}"></span>
-    </div>
-  </div>
-
-  <!-- 내용 섹션 -->
-  <div class="post-content">
-    <p th:text="${post.content}"></p>
-  </div>
-</div>
-<div class="comments-section">
-  <h3>댓글</h3>
-  <ul class="comments-list">
-    <li th:each="comment : ${post.comments}">
-      <div class="comment">
-        <span class="comment-writer" th:text="${comment.user.nickname}"></span>
-        <div class="comment-content">
-          <span class="comment-time" th:text="${comment.modifiedDate}"></span>
-          <p th:text="${comment.content}"></p>
-        </div>
+  <div class="post-detail">
+    <!-- 제목 섹션 -->
+    <div class="post-header">
+      <h2 th:text="${post.title}"></h2>
+      <div class="post-meta">
+        <span class="post-nickname" th:text="${post.user.nickname}"></span>
+        <span class="post-dates"
+              th:text="'작성일 ' + ${#temporals.format(post.createdDate, 'yyyy-MM-dd HH:mm:ss')} + ' | 수정일 ' + ${#temporals.format(post.modifiedDate, 'yyyy-MM-dd HH:mm:ss')}"></span>
       </div>
-    </li>
-  </ul>
-</div>
-<button class="return-button" onclick="history.back()">돌아가기</button>
+    </div>
+
+    <!-- 추가 정보 섹션 -->
+    <div class="post-info">
+      <div>
+        조회수 <span th:text="${post.viewCount}"></span> |
+        좋아요 <span th:text="${post.favCount}"></span>
+      </div>
+    </div>
+
+    <!-- 내용 섹션 -->
+    <div class="post-content">
+      <p th:text="${post.content}"></p>
+    </div>
+  </div>
+
+  <!-- 댓글 섹션 -->
+  <div class="comments-section">
+    <h3>댓글</h3>
+    <div class="comment-input">
+      <textarea id="comment-write" rows="3" placeholder="댓글을 입력해주세요."></textarea>
+      <button id="submit-button">등록</button>
+    </div>
+    <ul class="comments-list">
+      <li th:each="comment : ${post.comments}">
+        <div class="comment">
+          <span class="comment-writer" th:text="${comment.user.nickname}"></span>
+          <div class="comment-content">
+            <span class="comment-time" th:text="${comment.modifiedDate}"></span>
+            <p th:text="${comment.content}"></p>
+          </div>
+        </div>
+      </li>
+    </ul>
+  </div>
+  <button class="return-button" onclick="history.back()">돌아가기</button>
 </body>
 </html>

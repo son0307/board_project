@@ -33,9 +33,9 @@ public class CommentService {
         request.setUser(writer);
         Comment newComment = request.toCommentEntity();
 
-        commentRepository.save(newComment);
-        targetPost.getComments().add(newComment);
+        targetPost.addComment(newComment);
 
+        postRepository.save(targetPost);
         log.info("{} 댓글 추가", request.getContent());
     }
 

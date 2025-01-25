@@ -34,10 +34,10 @@ public class PostController {
         페이지 id를 기준으로 내림차순으로 정렬, 한 페이지당 게시글 개수 10개
     */
     @GetMapping("/")
-    public String list(Model model,
-                       @RequestParam(defaultValue = "1") int page,
-                       @RequestParam(defaultValue = "") String keyword,
-                       @PageableDefault(sort = "id", direction = Sort.Direction.DESC)Pageable pageable) {
+    public String postList(Model model,
+                           @RequestParam(defaultValue = "1") int page,
+                           @RequestParam(defaultValue = "") String keyword,
+                           @PageableDefault(sort = "id", direction = Sort.Direction.DESC)Pageable pageable) {
         // Spring에서는 0부터 시작하므로 -1 처리
         Pageable modifiedPageable = PageRequest.of(page - 1, pageable.getPageSize(), pageable.getSort());
         Page<Post> posts;
@@ -61,7 +61,7 @@ public class PostController {
 
     /* 게시글 상세정보 조회 */
     @GetMapping("/{id}")
-    public String post(@PathVariable int id, Model model) {
+    public String postView(@PathVariable int id, Model model) {
         PostResponseDto target = postService.findPost(id);
 
         model.addAttribute("post", target);
@@ -71,13 +71,13 @@ public class PostController {
 
     /* 글쓰기 페이지로 이동 */
     @GetMapping("/write")
-    public String write() {
+    public String moveToWrite() {
         return "post/write";
     }
 
     /* 새로운 글 등록 */
     @PostMapping("/register")
-    public ResponseEntity<?> register(@RequestBody PostRequestDto postRequestDto) {
+    public ResponseEntity<?> postRegister(@RequestBody PostRequestDto postRequestDto) {
         // 임시로 userId 설정하고 등록처리
         postService.savePost(postRequestDto, 1);
 

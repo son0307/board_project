@@ -68,6 +68,15 @@ body {
     text-align: center;
 }
 
+.return-button:hover {
+    background-color: #45a049;
+}
+
+.return-button:active {
+    background-color: #3e8e41;
+    transform: translateY(1px);
+}
+
 .comments-section {
     margin: 20px auto;
     max-width: 800px;
@@ -122,4 +131,38 @@ body {
     margin-top: 5px;
     font-size: 0.8em;
     color: #000000;
+}
+
+.comment-input {
+    display: flex;
+    align-items: center;
+    gap: 5px;
+}
+
+.comment-input textarea {
+    width: 85%;
+    padding: 10px;
+    font-size: 16px;
+    resize :none;
+    border-radius: 5px;
+    border: solid 2px #737373;
+    outline-color: #87cefa;
+}
+
+.comment-input button {
+    padding: 10px 20px;
+    font-size: 16px;
+    background-color: #4CAF50;
+    color: white;
+    border: none;
+    cursor: pointer;
+}
+
+.comment-input button:hover {
+    background-color: #45a049;
+}
+
+.comment-input button:active {
+    background-color: #3e8e41;
+    transform: translateY(1px);
 }
