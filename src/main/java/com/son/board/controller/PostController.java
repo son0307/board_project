@@ -62,6 +62,7 @@ public class PostController {
     /* 게시글 상세정보 조회 */
     @GetMapping("/{id}")
     public String postView(@PathVariable int id, Model model) {
+        postService.updateViewCount(id);
         PostResponseDto target = postService.findPost(id);
 
         model.addAttribute("post", target);

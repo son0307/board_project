@@ -10,17 +10,26 @@ async function validateForm(event) {
     const title = document.getElementById("title").value.trim();
     const content = document.getElementById("content").value.trim();
 
+    //csrf token
+    const csrfHeader = document.querySelector('meta[name="_csrf_header"]').content;
+    const csrfToken = document.querySelector('meta[name="_csrf"]').content;
+
+    //headers 에 csrfToken 설정
+    //json 타입
+    const jsonHeaders = {
+        "Content-Type": "application/json",
+    };
+    jsonHeaders[csrfHeader] = csrfToken;
+
     // 제목이 비어 있는 경우 경고 발생
     if (!title) {
         alert("제목을 입력해주세요.");
-        event.preventDefault(); // 폼 제출 방지
         return;
     }
 
     // 내용이 비어 있는 경우 경고 발생
     if (!content) {
         alert("내용을 입력해주세요.");
-        event.preventDefault(); // 폼 제출 방지
         return;
     }
 
@@ -34,9 +43,7 @@ async function validateForm(event) {
         // JSON 전송
         const response = await fetch("/register", {
             method: "POST",
-            headers: {
-                "Content-Type": "application/json",
-            },
+            headers: jsonHeaders,
             body: JSON.stringify(data),
         });
 
@@ -45,7 +52,7 @@ async function validateForm(event) {
             window.location.href="/";
         } else {
             const errorData = await response.json();
-            alert(`오류 발생: ${errorData.message}`);
+            alert(`오류 발생: ${errorData.status}, ${errorData.error}`);
         }
     } catch (error) {
         console.error("전송 중 오류 발생: ", error);

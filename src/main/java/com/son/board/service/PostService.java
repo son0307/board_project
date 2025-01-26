@@ -66,6 +66,11 @@ public class PostService {
         log.info("postId : {} 삭제", postId);
     }
 
+    @Transactional
+    public void updateViewCount(int postId) {
+        postRepository.updateView(postId);
+    }
+
     /* 게시물 리스트 호출 */
     // 조회 성능을 개선하기 위해 readOnly 옵션을 true로 설정
     @Transactional(readOnly = true)
