@@ -2,17 +2,19 @@
 <html xmlns:th="http://www.thymeleaf.org">
 <head>
     <meta charset="UTF-8">
+
     <!--  csrf token  -->
     <meta name="_csrf" th:content="${_csrf.token}">
     <meta name="_csrf_header" th:content="${_csrf.headerName}"/>
+
     <title>Board Service</title>
     <link rel="stylesheet" type="text/css" th:href="@{/css/write.css}">
     <script src="/script/write.js" defer></script>
 </head>
+
 <body>
-    <div class="header">
-        게시판
-    </div>
+    <div th:replace="~{infra/navbar :: navbarFragment}"></div>
+    <div class="header"></div>
     <div class="write-detail">
         <h1>게시글 등록</h1>
         <form id="form">

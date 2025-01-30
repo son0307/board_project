@@ -34,35 +34,31 @@ body {
     font-family: Arial, sans-serif;
 }
 
-.write-detail h1 {
-    font-size: 1.8em;
+.write-title p {
+    color: #ff3d3d;
+    font-size: 12px;
+    margin: 0px;
 }
 
 .write-title label {
-    font-size: 1.25em;
-    margin-bottom: 15px;
+    font-size: 20px;
 }
 
 .write-title input[type="text"] {
     width: 800px;
     padding: 10px;
-    font-size: 16px;
+    font-size: 14px;
     margin-bottom: 10px;
     border-radius: 5px;
     outline-color: #87cefa;
 }
 
-.write-content label {
-    font-size: 1.25em;
-    margin-bottom: 15px;
-}
-
-.write-content textarea {
-    width: 100%;
+.input-error {
+    width: 800px;
     padding: 10px;
-    font-size: 16px;
-    resize: none;
+    font-size: 14px;
+    margin-bottom: 10px;
     border-radius: 5px;
-    border: solid 2px #737373;
-    outline-color: #87cefa;
+    border: 2px solid #ff3d3d;
+    outline: none;
 }

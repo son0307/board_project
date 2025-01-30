@@ -6,8 +6,15 @@ import com.son.board.dto.UserResponseDto;
 import com.son.board.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.validation.BindingResult;
+import org.springframework.validation.Errors;
+import org.springframework.validation.FieldError;
+
+import java.util.HashMap;
+import java.util.Map;
 
 @Slf4j
 @Service
@@ -16,9 +23,12 @@ public class UserService {
 
     private final UserRepository userRepository;
 
+    private final BCryptPasswordEncoder encoder;
+
     /* 유저 등록 */
     @Transactional
     public void saveUser(UserRequestDto request) {
+        request.setPassword(encoder.encode(request.getPassword()));
         User newUser = request.toUserEntity();
         userRepository.save(newUser);
         log.info("nickname : {} 등록", request.getNickname());
@@ -52,5 +62,28 @@ public class UserService {
 
         userRepository.deleteById(userId);
         log.info("userId : {} 삭제", userId);
+    }
+
+    @Transactional(readOnly = true)
+    public Map<String, String> validateHandling(BindingResult bindingResult) {
+        Map<String, String> validateResult = new HashMap<>();
+
+        for(FieldError error : bindingResult.getFieldErrors()) {
+            String errorKey = error.getField();
+            validateResult.put(errorKey, error.getDefaultMessage());
+        }
+
+        return validateResult;
+    }
+
+    /* 아이디, 닉네임 중복 여부 검사 */
+    @Transactional(readOnly = true)
+    public boolean checkUsernameDuplication(String username) {
+        return userRepository.existsByUsername(username);
+    }
+
+    @Transactional(readOnly = true)
+    public boolean checkNicknameDuplication(String nickname) {
+        return userRepository.existsByNickname(nickname);
     }
 }

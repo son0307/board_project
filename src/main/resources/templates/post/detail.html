@@ -10,10 +10,8 @@
       <script src="/script/detail.js" defer> </script>
 </head>
 <body>
-    <div class="header">
-      게시판
-    </div>
-
+    <nav th:replace="~{infra/navbar :: navbarFragment}"></nav>
+    <div class="header"></div>
     <div class="post-detail">
         <!-- 제목 섹션 -->
         <div class="post-header">

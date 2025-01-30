@@ -13,8 +13,6 @@ import lombok.NoArgsConstructor;
 import java.time.LocalDateTime;
 import java.util.Objects;
 
-
-
 /* 사용자 등록, 수정 처리용 dto */
 @Data
 @Builder
@@ -23,6 +21,7 @@ import java.util.Objects;
 public class UserRequestDto {
 
     @NotBlank(message = "ID는 비워둘 수 없습니다.", groups = NotBlankGroup.class)
+    @Pattern(regexp = "^[a-zA-Z0-9]+$", message = "ID는 영어 또는 숫자만 사용할 수 있습니다.", groups = PatternGroup.class)
     private String username;
 
     @NotBlank(message = "닉네임은 비워둘 수 없습니다.", groups = NotBlankGroup.class)

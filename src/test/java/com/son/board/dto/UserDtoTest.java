@@ -1,6 +1,5 @@
 package com.son.board.dto;
 
-import com.son.board.domain.User;
 import com.son.board.validator.ValidationGroups.*;
 import com.son.board.validator.ValidationSequences;
 import jakarta.validation.ConstraintViolation;

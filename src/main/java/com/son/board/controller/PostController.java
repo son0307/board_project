@@ -5,7 +5,6 @@ import com.son.board.dto.PostRequestDto;
 import com.son.board.dto.PostResponseDto;
 import com.son.board.dto.UserRequestDto;
 import com.son.board.service.PostService;
-import com.son.board.service.UserService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.Page;
@@ -27,7 +26,6 @@ import java.util.Map;
 public class PostController {
 
     private final PostService postService;
-    private final UserService userService;
 
     /*
         게시글 리스트 출력
@@ -93,8 +91,6 @@ public class PostController {
                 .password("1234")
                 .register_date(LocalDateTime.now())
                 .build();
-
-        // userService.saveUser(user);
 
         for(int i = 31; i < 60; i++) {
             PostRequestDto request = PostRequestDto.builder()

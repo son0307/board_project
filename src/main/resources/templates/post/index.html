@@ -7,9 +7,8 @@
     <script src="/script/index.js" defer></script>
 </head>
 <body>
-    <div class="header">
-        게시판
-    </div>
+    <nav th:replace="~{infra/navbar :: navbarFragment}"></nav>
+    <div class="header"></div>
     <div class="search-bar">
         <input id="keyword-input" type="text" placeholder="검색">
         <button id="search-button">검색</button>
@@ -41,7 +40,7 @@
             </tbody>
         </table>
     </div>
-    <div class="pagination">
+    <div class="customPagination">
         <!-- 이전 버튼 -->
         <button
                 th:classappend="${page <= 1} ? 'disabled' : ''"

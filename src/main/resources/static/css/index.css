@@ -5,11 +5,9 @@ body {
 }
 
 .header {
-    background-color: #87CEFA;
-    padding: 20px;
+    padding: 40px;
     text-align: center;
     font-size: 24px;
-    color: white;
 }
 
 .search-bar {
@@ -64,12 +62,12 @@ th {
     background-color: #f2f2f2;
 }
 
-.pagination {
+.customPagination {
     margin: 20px auto;
     text-align: center;
 }
 
-.pagination button {
+.customPagination button {
     padding: 10px 15px;
     font-size: 16px;
     border: 1px solid #ddd;
@@ -77,7 +75,7 @@ th {
     cursor: pointer;
 }
 
-.pagination button:hover {
+.customPagination button:hover {
     background-color: #ddd;
 }
 
