@@ -34,7 +34,7 @@ async function validateContent(event) {
 
     try {
         // JSON 전송
-        const response = await fetch("/" + postId + "/comments/register", {
+        const response = await fetch("/comments/" + postId + "/register", {
             method: "POST",
             headers: jsonHeaders,
             body: JSON.stringify(data),

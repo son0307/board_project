@@ -5,6 +5,7 @@ import com.son.board.dto.PostRequestDto;
 import com.son.board.dto.PostResponseDto;
 import com.son.board.dto.UserRequestDto;
 import com.son.board.service.PostService;
+import com.son.board.service.UserDetailsImpl;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.Page;
@@ -13,6 +14,7 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.data.web.PageableDefault;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
@@ -76,9 +78,10 @@ public class PostController {
 
     /* 새로운 글 등록 */
     @PostMapping("/register")
-    public ResponseEntity<?> postRegister(@RequestBody PostRequestDto postRequestDto) {
+    public ResponseEntity<?> postRegister(@RequestBody PostRequestDto postRequestDto,
+                                          @AuthenticationPrincipal UserDetailsImpl userDetails) {
         // 임시로 userId 설정하고 등록처리
-        postService.savePost(postRequestDto, 1);
+        postService.savePost(postRequestDto, userDetails.getUser().getId());
 
         return ResponseEntity.ok(Map.of("message", "게시글이 등록되었습니다."));
     }
