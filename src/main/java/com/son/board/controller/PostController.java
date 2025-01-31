@@ -21,6 +21,7 @@ import org.springframework.web.bind.annotation.*;
 
 import java.time.LocalDateTime;
 import java.util.Map;
+import java.util.Objects;
 
 @Controller
 @Slf4j
@@ -72,39 +73,38 @@ public class PostController {
 
     /* 글쓰기 페이지로 이동 */
     @GetMapping("/write")
-    public String moveToWrite() {
+    public String moveToWrite(@RequestParam(value = "postId", required = false) String postId,
+                              Model model) {
+        if(Objects.isNull(postId)) {
+            model.addAttribute("post", new PostRequestDto());
+        }
+        else {
+            model.addAttribute("post", postService.findPost(Integer.parseInt(postId)));
+        }
+
         return "post/write";
     }
 
     /* 새로운 글 등록 */
     @PostMapping("/register")
     public ResponseEntity<?> postRegister(@RequestBody PostRequestDto postRequestDto,
+                                          @RequestParam(value = "postId", required = false) String postId,
                                           @AuthenticationPrincipal UserDetailsImpl userDetails) {
-        // 임시로 userId 설정하고 등록처리
-        postService.savePost(postRequestDto, userDetails.getUser().getId());
+        if(Objects.isNull(postId)) {
+            postService.savePost(postRequestDto, userDetails.getUser().getId());
+        }
+        else {
+            postService.updatePost(postRequestDto, Integer.parseInt(postId));
+        }
 
         return ResponseEntity.ok(Map.of("message", "게시글이 등록되었습니다."));
     }
 
-    @GetMapping("/addData")
-    public void addData() {
-        UserRequestDto user = UserRequestDto.builder()
-                .username("ID")
-                .nickname("닉네임")
-                .password("1234")
-                .register_date(LocalDateTime.now())
-                .build();
+    /* 게시글 삭제 */
+    @DeleteMapping("/delete/{postId}")
+    public ResponseEntity<?> postDelete(@PathVariable("postId") int postId) {
+        postService.deletePost(postId);
 
-        for(int i = 31; i < 60; i++) {
-            PostRequestDto request = PostRequestDto.builder()
-                    .content("내용" + i)
-                    .title("테스트 데이터" + i)
-                    .user(user.toUserEntity())
-                    .createdDate(LocalDateTime.now())
-                    .modifiedDate(LocalDateTime.now())
-                    .build();
-
-            postService.savePost(request, 1);
-        }
+        return ResponseEntity.ok(Map.of("message", "게시글이 삭제되었습니다."));
     }
 }

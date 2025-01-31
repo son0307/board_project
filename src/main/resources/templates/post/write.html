@@ -20,11 +20,11 @@
         <form id="form">
             <div class="write-title">
                 <label for="title">제목</label><br>
-                <input type="text" id="title" name="title">
+                <input type="text" id="title" name="title" th:value="${post.title}">
             </div>
             <div class="write-content">
                 <label for="content">내용</label><br>
-                <textarea id="content" name="content" rows="10" cols="100"></textarea>
+                <textarea id="content" name="content" rows="10" cols="100" th:text="${post.content}"></textarea>
             </div>
             <button class="submit-button" type="submit">게시글 등록</button>
         </form>

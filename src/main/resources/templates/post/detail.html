@@ -37,21 +37,28 @@
         </div>
     </div>
 
+    <div th:if="${#authorization.expression('isAuthenticated()')}">
+        <div class="button-container" th:if="${#authentication.principal.id == post.user.getId()}">
+            <button class="edit-button" th:onclick="|location.href='write?postId=${post.id}'|">수정</button>
+            <button class="delete-button" id="delete-button">삭제</button>
+        </div>
+    </div>
+
     <!-- 댓글 섹션 -->
     <div class="comments-section">
         <h3>댓글</h3>
         <div class="comment-input" th:if="${#authorization.expression('isAuthenticated()')}">
-          <textarea id="comment-write" rows="3" placeholder="댓글을 입력해주세요."></textarea>
-          <button id="submit-button">등록</button>
+            <textarea id="comment-write" rows="3" placeholder="댓글을 입력해주세요."></textarea>
+            <button id="submit-button">등록</button>
         </div>
         <ul class="comments-list">
             <li th:each="comment : ${post.comments}">
                 <div class="comment">
                     <span class="comment-writer" th:text="${comment.user.nickname}"></span>
-                        <div class="comment-content">
-                            <span class="comment-time" th:text="${#temporals.format(comment.createdDate, 'yyyy-MM-dd HH:mm:ss')}"></span>
-                            <p th:text="${comment.content}"></p>
-                        </div>
+                    <div class="comment-content">
+                        <span class="comment-time" th:text="${#temporals.format(comment.createdDate, 'yyyy-MM-dd HH:mm:ss')}"></span>
+                        <p th:text="${comment.content}"></p>
+                    </div>
                 </div>
             </li>
         </ul>
