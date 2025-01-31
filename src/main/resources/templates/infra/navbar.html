@@ -11,11 +11,24 @@
 
   <div class="collapse navbar-collapse" id="navbarsExampleDefault">
     <ul class="navbar-nav mr-auto">
-      <li class="nav-item">
+      <!-- 로그인하지 않은 경우에만 회원가입, 로그인 버튼 표시 -->
+      <li class="nav-item" th:if="${#authorization.expression('isAnonymous()')}">
         <a class="nav-link" href="/signup">회원가입</a>
       </li>
-      <li class="nav-item">
+      <li class="nav-item" th:if="${#authorization.expression('isAnonymous()')}">
         <a class="nav-link" href="/login">로그인</a>
+      </li>
+    </ul>
+
+    <ul class="navbar-nav">
+      <!-- 로그인한 경우에만 닉네임, 로그아웃 버튼 표시 -->
+      <li class="nav-item" th:if="${#authorization.expression('isAuthenticated()')}">
+        <a class="navbar-text text-light mr-3" th:text="${#authentication.principal.username}" href="">사용자</a>
+      </li>
+      <li class="nav-item" th:if="${#authorization.expression('isAuthenticated()')}">
+        <form th:action="@{/logout}" method="post">
+          <button type="submit" class="btn btn-outline-light">로그아웃</button>
+        </form>
       </li>
     </ul>
   </div>

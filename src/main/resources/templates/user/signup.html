@@ -2,7 +2,6 @@
 <html xmlns:th="http://www.thymeleaf.org">
 <head>
     <meta charset="UTF-8">
-    <!--  csrf token  -->
     <title>Board Service</title>
     <link rel="stylesheet" type="text/css" th:href="@{/css/signup.css}">
     <script src="/script/signup.js" defer></script>
@@ -20,16 +19,12 @@
                 <input type="text" id="username" name="username" th:field="*{username}"
                         th:classappend="${#fields.hasErrors('username')} ? 'input-error' : ''">
                 <p th:if="${#fields.hasErrors('username')}" th:errors="*{username}"></p><br>
-            </div>
 
-            <div class="write-title">
                 <label for="password">비밀번호</label><br>
                 <input type="text" id="password" name="password" th:field="*{password}"
                        th:classappend="${#fields.hasErrors('password')} ? 'input-error' : ''">
                 <p th:if="${#fields.hasErrors('password')}" th:errors="*{password}"></p><br>
-            </div>
 
-            <div class="write-title">
                 <label for="nickname">닉네임</label><br>
                 <input type="text" id="nickname" name="nickname" th:field="*{nickname}"
                        th:classappend="${#fields.hasErrors('nickname')} ? 'input-error' : ''">

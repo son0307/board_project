@@ -75,4 +75,13 @@ public class UserController {
         return ResponseEntity.ok(userService.checkNicknameDuplication(nickname));
     }
 
+    /* 로그인 페이지로 이동 */
+    @GetMapping("/login")
+    public String login(@RequestParam(value = "error", required = false) String error, Model model) {
+        if(error != null) {
+            model.addAttribute("errorMessage", "로그인 실패. 아이디와 비밀번호를 확인해주세요.");
+        }
+
+        return "/user/login";
+    }
 }
