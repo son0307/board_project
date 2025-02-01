@@ -5,7 +5,11 @@ const csrfToken = document.querySelector('meta[name="_csrf"]').content;
 document.addEventListener('DOMContentLoaded', function () {
     document.getElementById("submit-button").addEventListener("click", validateContent);
     document.getElementById("delete-button").addEventListener("click", deletePost);
-})
+
+    document.querySelectorAll(".delete-comment-btn").forEach(button => {
+       button.addEventListener("click", deleteComment)
+    });
+});
 
 async function validateContent(event) {
     event.preventDefault();
@@ -75,6 +79,38 @@ async function deletePost() {
         if (response.ok) {
             alert("게시글이 삭제되었습니다.");
             window.location.href="/";
+        } else {
+            const errorData = await response.json();
+            alert(`오류 발생: ${errorData.status}, ${errorData.error}`);
+        }
+    } catch (error) {
+        console.error("전송 중 오류 발생: ", error);
+        alert("서버와 통신 중 오류가 발생했습니다.");
+    }
+}
+
+async function deleteComment() {
+    if (!confirm("댓글을 삭제하시겠습니까?")) {
+        return;
+    }
+
+    const post = window.location.pathname;
+    const postId = post.replace(/[^0-9]/g, "");
+    const commentId = this.dataset.commentId;
+
+    const jsonHeaders = {};
+    jsonHeaders[csrfHeader] = csrfToken;
+
+    try {
+        // JSON 전송
+        const response = await fetch("/comments/" + postId + "/" + commentId, {
+            method: "DELETE",
+            headers: jsonHeaders,
+        });
+
+        if (response.ok) {
+            alert("댓글이 삭제되었습니다.");
+            location.reload();
         } else {
             const errorData = await response.json();
             alert(`오류 발생: ${errorData.status}, ${errorData.error}`);

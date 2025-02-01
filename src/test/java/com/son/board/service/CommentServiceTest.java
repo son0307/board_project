@@ -137,11 +137,13 @@ public class CommentServiceTest {
         commentService.saveComment(comment2, 1, 1);
 
         // when
-        commentService.deleteComment(1);
+        commentService.deleteComment(1, 1);
+        entityManager.flush();
+        entityManager.clear();
 
         // then
         PostResponseDto targetPost = postService.findPost(1);
         List<Comment> comments = targetPost.getComments();
-        Assertions.assertThat(comments.get(0).getContent()).isEqualTo("[삭제된 댓글입니다.]");
+        Assertions.assertThat(comments.size()).isEqualTo(1);
     }
 }

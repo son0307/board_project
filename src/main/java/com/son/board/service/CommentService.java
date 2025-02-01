@@ -52,11 +52,14 @@ public class CommentService {
 
     /* 댓글 삭제 */
     @Transactional
-    public void deleteComment(int commentId) {
+    public void deleteComment(int postId, int commentId) {
+        Post targetPost = postRepository.findById(postId)
+                .orElseThrow(() -> new IllegalArgumentException(commentId + " : 게시글 정보가 없습니다."));
+
         Comment targetComment = commentRepository.findById(commentId)
                 .orElseThrow(() -> new IllegalArgumentException(commentId + " : 댓글 정보가 없습니다."));
 
-        targetComment.update("[삭제된 댓글입니다.]");
+        targetPost.deleteComment(targetComment);
 
         log.info("commentId : {} 삭제", commentId);
     }
