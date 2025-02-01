@@ -4,6 +4,7 @@ import com.son.board.domain.Post;
 import com.son.board.dto.PostRequestDto;
 import com.son.board.dto.PostResponseDto;
 import com.son.board.dto.UserRequestDto;
+import com.son.board.service.PostLikeService;
 import com.son.board.service.PostService;
 import com.son.board.service.UserDetailsImpl;
 import lombok.RequiredArgsConstructor;
@@ -29,6 +30,7 @@ import java.util.Objects;
 public class PostController {
 
     private final PostService postService;
+    private final PostLikeService postLikeService;
 
     /*
         게시글 리스트 출력
@@ -62,17 +64,23 @@ public class PostController {
 
     /* 게시글 상세정보 조회 */
     @GetMapping("/{id}")
-    public String postView(@PathVariable int id, Model model) {
+    public String postView(@PathVariable int id, Model model, @AuthenticationPrincipal UserDetailsImpl userDetails) {
         postService.updateViewCount(id);
         PostResponseDto target = postService.findPost(id);
+        boolean isLiked = false;
+
+        if(userDetails != null) {
+            isLiked = postLikeService.isUserLikePost(id, userDetails.getId());
+        }
 
         model.addAttribute("post", target);
+        model.addAttribute("isLiked", isLiked);
 
         return "post/detail";
     }
 
     /* 글쓰기 페이지로 이동 */
-    @GetMapping("/write")
+    @GetMapping("/post/write")
     public String moveToWrite(@RequestParam(value = "postId", required = false) String postId,
                               Model model) {
         if(Objects.isNull(postId)) {
@@ -86,7 +94,7 @@ public class PostController {
     }
 
     /* 새로운 글 등록 */
-    @PostMapping("/register")
+    @PostMapping("/post/register")
     public ResponseEntity<?> postRegister(@RequestBody PostRequestDto postRequestDto,
                                           @RequestParam(value = "postId", required = false) String postId,
                                           @AuthenticationPrincipal UserDetailsImpl userDetails) {
@@ -101,7 +109,7 @@ public class PostController {
     }
 
     /* 게시글 삭제 */
-    @DeleteMapping("/delete/{postId}")
+    @DeleteMapping("/post/delete/{postId}")
     public ResponseEntity<?> postDelete(@PathVariable("postId") int postId) {
         postService.deletePost(postId);
 

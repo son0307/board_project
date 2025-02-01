@@ -1,7 +1,3 @@
-//csrf token
-const csrfHeader = document.querySelector('meta[name="_csrf_header"]').content;
-const csrfToken = document.querySelector('meta[name="_csrf"]').content;
-
 document.addEventListener('DOMContentLoaded', function () {
     document.getElementById("submit-button").addEventListener("click", validateContent);
     document.getElementById("delete-button").addEventListener("click", deletePost);
@@ -9,7 +5,39 @@ document.addEventListener('DOMContentLoaded', function () {
     document.querySelectorAll(".delete-comment-btn").forEach(button => {
        button.addEventListener("click", deleteComment)
     });
+
+    document.querySelector(".like-button")?.addEventListener("click", toggleLike);
 });
+
+//headers 에 csrfToken 설정
+function getJsonHeaders() {
+    const csrfHeader = document.querySelector('meta[name="_csrf_header"]').content;
+    const csrfToken = document.querySelector('meta[name="_csrf"]').content;
+
+    return {
+        "Content-Type": "application/json",
+        [csrfHeader]: csrfToken,
+    }
+}
+
+async function sendRequest(url, method) {
+    try {
+        const response = await fetch(url, {
+            method: method,
+            headers: getJsonHeaders(),
+        });
+
+        if (!response.ok) {
+            const errorData = await response.json();
+            throw new Error(`오류 발생: ${errorData.status}, ${errorData.error}`);
+        }
+        return response;
+    } catch (error) {
+        console.error("전송 중 오류 발생: ", error);
+        alert("서버와 통신 중 오류가 발생했습니다.");
+        throw error;
+    }
+}
 
 async function validateContent(event) {
     event.preventDefault();
@@ -25,13 +53,6 @@ async function validateContent(event) {
         return;
     }
 
-    //headers 에 csrfToken 설정
-    //json 타입
-    const jsonHeaders = {
-        "Content-Type": "application/json",
-    };
-    jsonHeaders[csrfHeader] = csrfToken;
-
     // JSON 데이터 생성
     const data = {
         content: content,
@@ -41,7 +62,7 @@ async function validateContent(event) {
         // JSON 전송
         const response = await fetch("/comments/" + postId + "/register", {
             method: "POST",
-            headers: jsonHeaders,
+            headers: getJsonHeaders(),
             body: JSON.stringify(data),
         });
 
@@ -66,14 +87,11 @@ async function deletePost() {
     const post = window.location.pathname;
     const postId = post.replace(/[^0-9]/g, "");
 
-    const jsonHeaders = {};
-    jsonHeaders[csrfHeader] = csrfToken;
-
     try {
         // JSON 전송
-        const response = await fetch("/delete/" + postId, {
+        const response = await fetch("/post/delete/" + postId, {
             method: "DELETE",
-            headers: jsonHeaders,
+            headers: getJsonHeaders(),
         });
 
         if (response.ok) {
@@ -98,25 +116,35 @@ async function deleteComment() {
     const postId = post.replace(/[^0-9]/g, "");
     const commentId = this.dataset.commentId;
 
-    const jsonHeaders = {};
-    jsonHeaders[csrfHeader] = csrfToken;
-
     try {
         // JSON 전송
-        const response = await fetch("/comments/" + postId + "/" + commentId, {
-            method: "DELETE",
-            headers: jsonHeaders,
-        });
-
-        if (response.ok) {
-            alert("댓글이 삭제되었습니다.");
-            location.reload();
-        } else {
-            const errorData = await response.json();
-            alert(`오류 발생: ${errorData.status}, ${errorData.error}`);
-        }
+        await sendRequest(`/comments/${postId}/${commentId}`, "DELETE");
+        alert("댓글이 삭제되었습니다.");
+        location.reload();
     } catch (error) {
         console.error("전송 중 오류 발생: ", error);
-        alert("서버와 통신 중 오류가 발생했습니다.");
+    }
+}
+
+async function toggleLike() {
+    const postId = this.getAttribute("data-post-id");
+
+    try {
+        // 서버에 POST 요청 보내고 응답 데이터 받기
+        const response = await sendRequest(`/post/toggle/${postId}`, "POST");
+        const data = await response.json(); // JSON 데이터 파싱
+
+        // 좋아요 상태 변경 (클래스 추가/제거)
+        if (data.liked) {
+            this.classList.add("liked");
+        } else {
+            this.classList.remove("liked");
+        }
+
+        // 좋아요 개수 업데이트
+        this.textContent = `좋아요 (${data.favCount})`;
+
+    } catch (error) {
+        console.error("전송 중 오류 발생: ", error);
     }
 }

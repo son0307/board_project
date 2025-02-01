@@ -209,3 +209,34 @@ button:active {
     justify-content: space-between; /* 좌측에는 시간, 우측에는 삭제 버튼 */
     align-items: center;
 }
+
+.like-button-container {
+    display:flex;
+    justify-content: center;
+    margin-top: 20px;
+}
+
+/* 기본 좋아요 버튼 스타일 */
+.like-button {
+    padding: 10px 15px;
+    border: 2px solid #ff7f00;
+    background-color: white;
+    color: #ff7f00;
+    font-size: 16px;
+    cursor: pointer;
+    border-radius: 5px;
+    transition: 0.3s;
+}
+
+/* 좋아요 버튼 활성화 (누른 상태) */
+.like-button.liked {
+    background-color: #ff7f00;
+    color: white;
+}
+
+/* 좋아요 버튼 비활성화 */
+.like-button.disabled {
+    color: gray;
+    border-color: gray;
+    cursor: not-allowed;
+}

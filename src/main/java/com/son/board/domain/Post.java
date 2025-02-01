@@ -58,6 +58,10 @@ public class Post {
         comments.remove(comment);
     }
 
+    public void updateFavCount(int favCount){
+        this.favCount = favCount;
+    }
+
     public void update(String title, String content) {
         this.title = title;
         this.content = content;

@@ -26,8 +26,7 @@
         <!-- 추가 정보 섹션 -->
         <div class="post-info">
             <div>
-                조회수 <span th:text="${post.viewCount}"></span> |
-                좋아요 <span th:text="${post.favCount}"></span>
+                조회수 <span th:text="${post.viewCount}"></span>
             </div>
         </div>
 
@@ -37,9 +36,24 @@
         </div>
     </div>
 
+    <!-- 좋아요 버튼 -->
+    <div class="like-button-container" th:if="${#authorization.expression('isAuthenticated()')}">
+        <button class="like-button"
+                th:classappend="${isLiked} ? 'liked' : ''"
+                th:attr="data-post-id=${post.id}"
+                th:text="'좋아요 (' + ${post.favCount} + ')'">
+        </button>
+    </div>
+
+    <!-- 비로그인 상태에서는 버튼 비활성화 -->
+    <div class="like-button-container" th:unless="${#authorization.expression('isAuthenticated()')}">
+        <button class="like-button disabled" disabled>좋아요 (<span th:text="${post.favCount}"></span>)</button>
+    </div>
+
+
     <div th:if="${#authorization.expression('isAuthenticated()')}">
         <div class="button-container" th:if="${#authentication.principal.id == post.user.id}">
-            <button class="edit-button" th:onclick="|location.href='write?postId=${post.id}'|">수정</button>
+            <button class="edit-button" th:onclick="|location.href='/post/write?postId=${post.id}'|">수정</button>
             <button class="delete-button" id="delete-button">삭제</button>
         </div>
     </div>

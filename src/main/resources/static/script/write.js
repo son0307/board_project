@@ -43,7 +43,7 @@ async function validateForm(event) {
 
     try {
         // JSON 전송
-        const response = await fetch(`/register${params}`, {
+        const response = await fetch(`/post/register${params}`, {
             method: "POST",
             headers: jsonHeaders,
             body: JSON.stringify(data),

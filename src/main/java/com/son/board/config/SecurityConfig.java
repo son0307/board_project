@@ -17,7 +17,7 @@ public class SecurityConfig {
         http
                 .authorizeHttpRequests(auth -> auth
                     .requestMatchers(PathRequest.toStaticResources().atCommonLocations()).permitAll()   // resources 접근 허용
-                    .requestMatchers("/write/**", "/user/**", "/comments/**").authenticated()   // 'write', 'user', 'comments'로 시작하는 url은 인증 필요
+                    .requestMatchers("/post/**", "/user/**", "/comments/**").authenticated()   // 'write', 'user', 'comments'로 시작하는 url은 인증 필요
                     .anyRequest().permitAll()   // 그 외에는 접근 허가
                 )
                 .formLogin(form -> form
