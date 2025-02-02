@@ -1,6 +1,10 @@
 document.addEventListener('DOMContentLoaded', function () {
     document.getElementById("submit-button").addEventListener("click", validateContent);
-    document.getElementById("delete-button").addEventListener("click", deletePost);
+
+    const deleteButton = document.getElementById("delete-button")
+    if(deleteButton != null) {
+        deleteButton.addEventListener("click", deletePost);
+    }
 
     document.querySelectorAll(".delete-comment-btn").forEach(button => {
        button.addEventListener("click", deleteComment)
