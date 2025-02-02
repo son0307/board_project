@@ -7,6 +7,7 @@ import com.son.board.dto.UserRequestDto;
 import com.son.board.service.PostLikeService;
 import com.son.board.service.PostService;
 import com.son.board.service.UserDetailsImpl;
+import jakarta.servlet.http.HttpSession;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.Page;
@@ -64,8 +65,18 @@ public class PostController {
 
     /* 게시글 상세정보 조회 */
     @GetMapping("/{id}")
-    public String postView(@PathVariable int id, Model model, @AuthenticationPrincipal UserDetailsImpl userDetails) {
-        postService.updateViewCount(id);
+    public String postView(@PathVariable int id, Model model,
+                           @AuthenticationPrincipal UserDetailsImpl userDetails,
+                           HttpSession session) {
+        // 세션에서 조회 기록 확인
+        String sessionKey = "viewed_post_" + id;
+
+        // 조회한 기록이 없으면 조회수 증가
+        if(session.getAttribute(sessionKey) == null) {
+            postService.updateViewCount(id);
+            session.setAttribute(sessionKey, true);
+        }
+
         PostResponseDto target = postService.findPost(id);
         boolean isLiked = false;
 
