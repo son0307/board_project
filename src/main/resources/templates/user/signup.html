@@ -11,7 +11,7 @@
     <div class="header"></div>
     <div class="write-detail">
         <h1>회원 가입</h1>
-        <form id="form" action="/signup" th:object="${userInput}" method="post">
+        <form id="form" action="/signup" th:object="${signUpInput}" method="post">
             <input type="hidden" th:name="${_csrf.parameterName}" th:value="${_csrf.token}"/>
 
             <div class="write-title">

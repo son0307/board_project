@@ -3,7 +3,6 @@ package com.son.board.controller;
 import com.son.board.domain.Post;
 import com.son.board.dto.PostRequestDto;
 import com.son.board.dto.PostResponseDto;
-import com.son.board.dto.UserRequestDto;
 import com.son.board.service.PostLikeService;
 import com.son.board.service.PostService;
 import com.son.board.service.UserDetailsImpl;
@@ -21,7 +20,6 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 
-import java.time.LocalDateTime;
 import java.util.Map;
 import java.util.Objects;
 

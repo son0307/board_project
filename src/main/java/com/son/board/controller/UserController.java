@@ -1,10 +1,10 @@
 package com.son.board.controller;
 
-import com.son.board.dto.UserRequestDto;
+import com.son.board.dto.UserSignUpRequestDto;
+import com.son.board.dto.UserResponseDto;
+import com.son.board.dto.UserUpdateRequestDto;
 import com.son.board.service.UserService;
-import com.son.board.validator.CheckNicknameValidator;
-import com.son.board.validator.CheckUsernameValidator;
-import com.son.board.validator.ValidationSequences;
+import com.son.board.validator.*;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.ResponseEntity;
@@ -24,21 +24,30 @@ public class UserController {
 
     private final UserService userService;
 
-    /* 중복 체크 유효성 검사 */
+    /* 회원가입 검증기 */
     private final CheckUsernameValidator checkUsernameValidator;
     private final CheckNicknameValidator checkNicknameValidator;
 
-    /* Validator 연결 */
-    @InitBinder
-    public void validatorBinder(WebDataBinder binder) {
-        binder.addValidators(checkUsernameValidator);
-        binder.addValidators(checkNicknameValidator);
+    /* 회원정보 수정 검증기 */
+    private final UpdateUsernameValidator updateUsernameValidator;
+    private final UpdateNicknameValidator updateNicknameValidator;
+
+    /* 회원가입 Validator 연결 */
+    @InitBinder("signUpInput")
+    public void initSignUpBinder(WebDataBinder binder) {
+        binder.addValidators(checkUsernameValidator, checkNicknameValidator);
+    }
+
+    /* 회원정보 수정 Validator 연결 */
+    @InitBinder("updateInput")
+    public void initUpdateBinder(WebDataBinder binder) {
+        binder.addValidators(updateUsernameValidator, updateNicknameValidator);
     }
 
     /* 회원가입 페이지로 이동 */
     @GetMapping("/signup")
     public String signUp(Model model) {
-        model.addAttribute("userInput", new UserRequestDto());
+        model.addAttribute("signUpInput", new UserSignUpRequestDto());
 
         return "user/signup";
     }
@@ -46,10 +55,9 @@ public class UserController {
     /* 회원가입 프로세스 */
     @PostMapping("/signup")
     public String signUpProc(@Validated(ValidationSequences.class)
-                                        @ModelAttribute("userInput") UserRequestDto request,
+                                        @ModelAttribute("signUpInput") UserSignUpRequestDto request,
                                         BindingResult bindingResult,
                                         Model model) {
-
         log.info(request.toString());
         if(bindingResult.hasErrors()) {
             model.addAttribute("userInput", request);
@@ -83,5 +91,41 @@ public class UserController {
         }
 
         return "/user/login";
+    }
+
+    /* 유저 정보 페이지로 이동 */
+    @GetMapping("/user/{userId}")
+    public String userDetail(@PathVariable int userId, Model model) {
+        UserResponseDto responseDto = userService.findUser(userId);
+        UserUpdateRequestDto userUpdateRequestDto = new UserUpdateRequestDto();
+        userUpdateRequestDto.setNickname(responseDto.getNickname());
+
+        model.addAttribute("userInfo", responseDto);
+        model.addAttribute("updateInput", userUpdateRequestDto);
+
+        return "/user/detail";
+    }
+
+    /* 유저 정보 수정 프로세스 */
+    @PostMapping("/user/{userId}")
+    public String userDetailProc(@PathVariable int userId,
+                                 @Validated(ValidationSequences.class)
+                                 @ModelAttribute("updateInput") UserUpdateRequestDto request,
+                                 BindingResult bindingResult,
+                                 Model model) {
+        UserResponseDto userInfo = userService.findUser(userId);
+        model.addAttribute("userInfo", userInfo);
+
+        if(bindingResult.hasErrors()) {
+            model.addAttribute("updateInput", request);
+            log.info(bindingResult.getAllErrors().toString());
+            Map<String, String> validatorResult = userService.validateHandling(bindingResult);
+
+            return "/user/detail";
+        }
+
+        userService.updateUser(userId, request);
+
+        return "redirect:/user/" + userId;
     }
 }

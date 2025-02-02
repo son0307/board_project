@@ -1,8 +1,9 @@
 package com.son.board.service;
 
 import com.son.board.domain.User;
-import com.son.board.dto.UserRequestDto;
+import com.son.board.dto.UserSignUpRequestDto;
 import com.son.board.dto.UserResponseDto;
+import com.son.board.dto.UserUpdateRequestDto;
 import com.son.board.repository.UserRepository;
 import jakarta.persistence.EntityManager;
 import org.assertj.core.api.Assertions;
@@ -37,7 +38,7 @@ public class UserServiceTest {
     @Test
     public void saveTest() {
         // given
-        UserRequestDto user = UserRequestDto.builder()
+        UserSignUpRequestDto user = UserSignUpRequestDto.builder()
                 .username("ID")
                 .nickname("닉네임")
                 .password("1234")
@@ -58,7 +59,7 @@ public class UserServiceTest {
     @Test
     public void loadTest() {
         // given
-        UserRequestDto user = UserRequestDto.builder()
+        UserSignUpRequestDto user = UserSignUpRequestDto.builder()
                 .username("ID")
                 .nickname("닉네임")
                 .password("1234")
@@ -79,7 +80,7 @@ public class UserServiceTest {
     @Test
     public void updateTest() {
         // given
-        UserRequestDto user = UserRequestDto.builder()
+        UserSignUpRequestDto user = UserSignUpRequestDto.builder()
                 .username("ID")
                 .nickname("닉네임")
                 .password("1234")
@@ -88,11 +89,9 @@ public class UserServiceTest {
 
         userService.saveUser(user);
 
-        UserRequestDto updatedUser = UserRequestDto.builder()
+        UserUpdateRequestDto updatedUser = UserUpdateRequestDto.builder()
                 .username("ID")
                 .nickname("새로운 닉네임")
-                .password("abcd")
-                .register_date(user.getRegister_date())
                 .build();
 
         // when

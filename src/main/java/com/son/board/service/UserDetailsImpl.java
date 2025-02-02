@@ -2,6 +2,7 @@ package com.son.board.service;
 
 import com.son.board.domain.User;
 import lombok.Getter;
+import lombok.RequiredArgsConstructor;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 
@@ -9,17 +10,22 @@ import java.util.Collection;
 import java.util.Collections;
 
 @Getter
+@RequiredArgsConstructor
 public class UserDetailsImpl implements UserDetails {
 
     private final User user;
 
-    public UserDetailsImpl(User user) {
-        this.user = user;
-    }
-
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
         return Collections.emptyList(); // 권한이 필요하다면 설정 가능
+    }
+
+    public int getId() {
+        return user.getId();
+    }
+
+    public String getNickname() {
+        return user.getNickname();
     }
 
     @Override

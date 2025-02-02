@@ -28,8 +28,7 @@ public class User {
     @Column(nullable = false)
     private LocalDateTime register_date;
 
-    public void update(String nickname, String password) {
+    public void update(String nickname) {
         this.nickname = nickname;
-        this.password = password;
     }
 }

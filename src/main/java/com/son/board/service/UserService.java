@@ -1,8 +1,9 @@
 package com.son.board.service;
 
 import com.son.board.domain.User;
-import com.son.board.dto.UserRequestDto;
+import com.son.board.dto.UserSignUpRequestDto;
 import com.son.board.dto.UserResponseDto;
+import com.son.board.dto.UserUpdateRequestDto;
 import com.son.board.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -10,7 +11,6 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.validation.BindingResult;
-import org.springframework.validation.Errors;
 import org.springframework.validation.FieldError;
 
 import java.util.HashMap;
@@ -22,12 +22,13 @@ import java.util.Map;
 public class UserService {
 
     private final UserRepository userRepository;
+    private final SecurityContextService securityContextService;
 
     private final BCryptPasswordEncoder encoder;
 
     /* 유저 등록 */
     @Transactional
-    public void saveUser(UserRequestDto request) {
+    public void saveUser(UserSignUpRequestDto request) {
         request.setPassword(encoder.encode(request.getPassword()));
         User newUser = request.toUserEntity();
         userRepository.save(newUser);
@@ -46,11 +47,15 @@ public class UserService {
 
     /* 유저 정보 갱신 */
     @Transactional
-    public void updateUser(int userId, UserRequestDto request) {
+    public void updateUser(int userId, UserUpdateRequestDto request) {
         User targetUser = userRepository.findById(userId)
                 .orElseThrow(() -> new IllegalArgumentException(userId + " : 사용자 정보가 없습니다."));
 
-        targetUser.update(request.getNickname(), request.getPassword());
+        targetUser.update(request.getNickname());
+        userRepository.save(targetUser);
+
+        securityContextService.refreshUserDetails(request.getUsername());
+
         log.info("userId : {} 갱신", userId);
     }
 
