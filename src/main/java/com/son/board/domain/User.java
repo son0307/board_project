@@ -30,11 +30,11 @@ public class User {
     @Column(nullable = false)
     private LocalDateTime register_date;
 
-    @OneToMany(mappedBy = "user", cascade = CascadeType.REMOVE, orphanRemoval = true)
+    @OneToMany(mappedBy = "user")
     @Builder.Default
     private List<Comment> comments = new ArrayList<>();
 
-    @OneToMany(mappedBy = "user", cascade = CascadeType.REMOVE, orphanRemoval = true)
+    @OneToMany(mappedBy = "user")
     @Builder.Default
     private List<Post> posts = new ArrayList<>();
 
