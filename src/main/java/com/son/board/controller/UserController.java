@@ -5,6 +5,7 @@ import com.son.board.dto.UserResponseDto;
 import com.son.board.dto.UserUpdateRequestDto;
 import com.son.board.service.UserService;
 import com.son.board.validator.*;
+import jakarta.servlet.http.HttpSession;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.ResponseEntity;
@@ -62,7 +63,6 @@ public class UserController {
         if(bindingResult.hasErrors()) {
             model.addAttribute("userInput", request);
             log.info(bindingResult.getAllErrors().toString());
-            Map<String, String> validatorResult = userService.validateHandling(bindingResult);
 
             return "user/signup";
         }
@@ -119,7 +119,6 @@ public class UserController {
         if(bindingResult.hasErrors()) {
             model.addAttribute("updateInput", request);
             log.info(bindingResult.getAllErrors().toString());
-            Map<String, String> validatorResult = userService.validateHandling(bindingResult);
 
             return "/user/detail";
         }
@@ -127,5 +126,14 @@ public class UserController {
         userService.updateUser(userId, request);
 
         return "redirect:/user/" + userId;
+    }
+
+    @DeleteMapping("/user/withdraw/{userId}")
+    public ResponseEntity<?> withdrawUser(@PathVariable int userId, HttpSession session) {
+        log.info("유저 삭제 요청 수신");
+        userService.deleteUser(userId);
+        session.invalidate();
+
+        return ResponseEntity.ok(Map.of("message", "탈퇴가 완료되었습니다."));
     }
 }

@@ -1,6 +1,6 @@
 package com.son.board.controller;
 
-import com.son.board.dto.PostLikeRequestDto;
+import com.son.board.dto.PostLikeResponseDto;
 import com.son.board.service.PostLikeService;
 import com.son.board.service.UserDetailsImpl;
 import lombok.RequiredArgsConstructor;
@@ -19,8 +19,8 @@ public class PostLikeController {
     @PostMapping("/post/toggle/{postId}")
     public ResponseEntity<?> toggleLike(@PathVariable int postId,
                                         @AuthenticationPrincipal UserDetailsImpl userDetails) {
-        PostLikeRequestDto postLikeRequestDto = postLikeService.toggle(postId, userDetails.getId());
+        PostLikeResponseDto postLikeResponseDto = postLikeService.toggle(postId, userDetails.getId());
 
-        return ResponseEntity.ok(postLikeRequestDto);
+        return ResponseEntity.ok(postLikeResponseDto);
     }
 }

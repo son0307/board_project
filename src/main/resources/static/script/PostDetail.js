@@ -24,17 +24,25 @@ function getJsonHeaders() {
     }
 }
 
-async function sendRequest(url, method) {
+async function sendRequest(url, method, data = null) {
     try {
-        const response = await fetch(url, {
-            method: method,
+        const options = {
+            method,
             headers: getJsonHeaders(),
-        });
+        };
+
+        if (data) {
+            options.body = JSON.stringify(data);
+        }
+
+        const response = await fetch(url, options);
+
 
         if (!response.ok) {
             const errorData = await response.json();
             throw new Error(`오류 발생: ${errorData.status}, ${errorData.error}`);
         }
+
         return response;
     } catch (error) {
         console.error("전송 중 오류 발생: ", error);
@@ -46,9 +54,7 @@ async function sendRequest(url, method) {
 async function validateContent(event) {
     event.preventDefault();
 
-    const post = window.location.pathname;
-    const postId = post.replace(/[^0-9]/g, "");
-
+    const postId = window.location.pathname.replace(/[^0-9]/g, "");
     const content = document.getElementById("comment-write").value.trim();
 
     // 내용이 비어있는 경우 경고 발생
@@ -58,28 +64,16 @@ async function validateContent(event) {
     }
 
     // JSON 데이터 생성
-    const data = {
-        content: content,
-    };
+    const data = { content };
 
     try {
-        // JSON 전송
-        const response = await fetch("/comments/" + postId + "/register", {
-            method: "POST",
-            headers: getJsonHeaders(),
-            body: JSON.stringify(data),
-        });
+        // 요청 전송
+        await sendRequest(`/comments/${postId}/register`, "POST", data);
 
-        if (response.ok) {
-            alert("댓글이 등록되었습니다.");
-            window.location.href="/" + postId;
-        } else {
-            const errorData = await response.json();
-            alert(`오류 발생: ${errorData.status}, ${errorData.error}`);
-        }
+        alert("댓글이 등록되었습니다.");
+        window.location.href = "/" + postId;
     } catch (error) {
         console.error("전송 중 오류 발생: ", error);
-        alert("서버와 통신 중 오류가 발생했습니다.");
     }
 }
 
@@ -88,23 +82,13 @@ async function deletePost() {
         return;
     }
 
-    const post = window.location.pathname;
-    const postId = post.replace(/[^0-9]/g, "");
+    const postId = window.location.pathname.replace(/[^0-9]/g, "");
 
     try {
         // JSON 전송
-        const response = await fetch("/post/delete/" + postId, {
-            method: "DELETE",
-            headers: getJsonHeaders(),
-        });
-
-        if (response.ok) {
-            alert("게시글이 삭제되었습니다.");
-            window.location.href="/";
-        } else {
-            const errorData = await response.json();
-            alert(`오류 발생: ${errorData.status}, ${errorData.error}`);
-        }
+        await sendRequest("/post/delete/" + postId, "DELETE");
+        alert("게시글이 삭제되었습니다.");
+        window.location.href="/";
     } catch (error) {
         console.error("전송 중 오류 발생: ", error);
         alert("서버와 통신 중 오류가 발생했습니다.");
@@ -116,8 +100,7 @@ async function deleteComment() {
         return;
     }
 
-    const post = window.location.pathname;
-    const postId = post.replace(/[^0-9]/g, "");
+    const postId = window.location.pathname.replace(/[^0-9]/g, "");
     const commentId = this.dataset.commentId;
 
     try {

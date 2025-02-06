@@ -2,6 +2,9 @@
 <html xmlns:th="http://www.thymeleaf.org">
 <head>
   <meta charset="UTF-8">
+  <!--  csrf token  -->
+  <meta name="_csrf" th:content="${_csrf.token}">
+  <meta name="_csrf_header" th:content="${_csrf.headerName}"/>
   <title>Board Service</title>
   <link rel="stylesheet" type="text/css" th:href="@{/css/signup.css}">
   <link rel="stylesheet" type="text/css" th:href="@{/css/UserDetail.css}">
@@ -27,8 +30,10 @@
       <p th:if="${#fields.hasErrors('nickname')}" th:errors="*{nickname}"></p>
     </div>
 
-    <div th:if="${#authentication.principal.id == userInfo.id}">
+    <div class="button-container" th:if="${#authentication.principal.id == userInfo.id}">
       <button id="submit-button" class="submit-button" type="submit" disabled>정보 수정</button>
+      <button id="withdraw-button" class="delete-button"
+              th:attr="data-user-id=${userInfo.id}">탈퇴</button>
     </div>
   </form>
   <button class="submit-button" onclick="location.href='/'">돌아가기</button>

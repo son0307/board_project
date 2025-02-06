@@ -59,7 +59,6 @@ public class CommentServiceTest {
                 .title("제목1")
                 .content("내용1")
                 .createdDate(LocalDateTime.now())
-                .modifiedDate(LocalDateTime.now())
                 .build();
 
         userRepository.save(user);
@@ -74,7 +73,6 @@ public class CommentServiceTest {
                 .content("댓글1")
                 .path("")
                 .createdDate(LocalDateTime.now())
-                .modifiedDate(LocalDateTime.now())
                 .build();
 
         // when
@@ -86,35 +84,6 @@ public class CommentServiceTest {
         Assertions.assertThat(targetComment.getContent()).isEqualTo(comment.getContent());
     }
 
-    /* 댓글 수정 테스트 */
-    @Test
-    public void updateTest() {
-        // given
-        CommentRequestDto comment = CommentRequestDto.builder()
-                .content("댓글1")
-                .path("")
-                .createdDate(LocalDateTime.now())
-                .modifiedDate(LocalDateTime.now())
-                .build();
-
-        commentService.saveComment(comment, 1, 1);
-
-        // when
-        CommentRequestDto updatedComment = CommentRequestDto.builder()
-                .content("변경된 댓글1")
-                .path("")
-                .createdDate(comment.getCreatedDate())
-                .modifiedDate(comment.getModifiedDate())
-                .build();
-
-        commentService.updateComment(updatedComment, 1);
-
-        // then
-        PostResponseDto targetPost = postService.findPost(1);
-        Comment targetComment = targetPost.getComments().get(0);
-        Assertions.assertThat(targetComment.getContent()).isEqualTo(updatedComment.getContent());
-    }
-
     /* 댓글 삭제 테스트 */
     @Test
     public void deleteTest() {
@@ -123,14 +92,12 @@ public class CommentServiceTest {
                 .content("댓글1")
                 .path("")
                 .createdDate(LocalDateTime.now())
-                .modifiedDate(LocalDateTime.now())
                 .build();
 
         CommentRequestDto comment2 = CommentRequestDto.builder()
                 .content("댓글2")
                 .path("")
                 .createdDate(LocalDateTime.now())
-                .modifiedDate(LocalDateTime.now())
                 .build();
 
         commentService.saveComment(comment1, 1, 1);

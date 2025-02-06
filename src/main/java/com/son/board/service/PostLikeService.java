@@ -3,7 +3,7 @@ package com.son.board.service;
 import com.son.board.domain.Post;
 import com.son.board.domain.PostLike;
 import com.son.board.domain.User;
-import com.son.board.dto.PostLikeRequestDto;
+import com.son.board.dto.PostLikeResponseDto;
 import com.son.board.repository.PostLikeRepository;
 import com.son.board.repository.PostRepository;
 import com.son.board.repository.UserRepository;
@@ -24,8 +24,8 @@ public class PostLikeService {
     private final UserRepository userRepository;
     private final PostLikeRepository postLikeRepository;
 
-    public PostLikeRequestDto toggle(int postId, int userId) {
-        PostLikeRequestDto postLikeRequestDto = new PostLikeRequestDto();
+    public PostLikeResponseDto toggle(int postId, int userId) {
+        PostLikeResponseDto postLikeResponseDto = new PostLikeResponseDto();
 
         // 게시글 조회
         Post targetPost = postRepository.findById(postId)
@@ -40,7 +40,7 @@ public class PostLikeService {
         if(existingLikeOpt.isPresent()) {
             // 이미 좋아요가 있으면 삭제
             postLikeRepository.delete(existingLikeOpt.get());
-            postLikeRequestDto.setLiked(false);
+            postLikeResponseDto.setLiked(false);
         } else {
             // 좋아요 추가
             PostLike postLike = PostLike.builder()
@@ -48,15 +48,15 @@ public class PostLikeService {
                     .user(targetUser)
                     .build();
             postLikeRepository.save(postLike);
-            postLikeRequestDto.setLiked(true);
+            postLikeResponseDto.setLiked(true);
         }
 
         // 좋아요 수 업데이트
         int favCount = postLikeRepository.countByPost(targetPost);
         targetPost.updateFavCount(favCount);
-        postLikeRequestDto.setFavCount(favCount);
+        postLikeResponseDto.setFavCount(favCount);
 
-        return postLikeRequestDto;
+        return postLikeResponseDto;
     }
 
     public boolean isUserLikePost(int postId, int userId) {

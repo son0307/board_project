@@ -31,8 +31,8 @@ public class UserSignUpRequestDto {
 
     @NotBlank(message = "비밀번호는 비워둘 수 없습니다.", groups = NotBlankGroup.class)
     @Size(min = 8, message = "비밀번호는 8자 이상이어야 합니다.", groups = SizeGroup.class)
-    @Pattern(regexp = "^(?=.*[a-zA-Z])(?=.*\\d)(?=.*[!@#$%^&*()_+\\-=\\[\\]{};':\"\\\\|,.<>\\/?]).+$",
-            message = "비밀번호는 영문, 숫자, 특수문자를 포함해야 합니다.", groups = PatternGroup.class)
+    @Pattern(regexp = "^(?=.*[a-zA-Z])(?=.*\\d)(?=.*[!@#$%^&*()_+\\-=\\[\\]{};':\"\\\\|,.<>\\/?])[^\\s]+$",
+            message = "비밀번호는 영문, 숫자, 특수문자를 포함해야 하며 공백을 포함할 수 없습니다.", groups = PatternGroup.class)
     private String password;
 
     private LocalDateTime register_date;

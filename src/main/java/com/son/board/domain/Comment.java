@@ -33,17 +33,8 @@ public class Comment {
     @Builder.Default
     private LocalDateTime createdDate = LocalDateTime.of(2025, 1, 1, 0, 0, 0);
 
-    @Column(name = "modified_date", nullable = false)
-    @Builder.Default
-    private LocalDateTime modifiedDate = LocalDateTime.of(2025, 1, 1, 0, 0, 0);
-
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "user_id", nullable = false)
     private User user;
-
-    public void update(String content) {
-        this.content = content;
-        this.modifiedDate = LocalDateTime.now();
-    }
 }
 

@@ -7,7 +7,7 @@ import lombok.NoArgsConstructor;
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
-public class PostLikeRequestDto {
+public class PostLikeResponseDto {
     private boolean liked;
     private int favCount;
 }

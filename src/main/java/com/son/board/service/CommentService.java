@@ -39,17 +39,6 @@ public class CommentService {
         log.info("{} 댓글 추가", request.getContent());
     }
 
-    /* 댓글 수정 */
-    @Transactional
-    public void updateComment(CommentRequestDto request, int commentId) {
-        Comment targetComment = commentRepository.findById(commentId)
-                .orElseThrow(() -> new IllegalArgumentException(commentId + " : 댓글 정보가 없습니다."));
-
-        targetComment.update(request.getContent());
-
-        log.info("commentId : {} 수정", commentId);
-    }
-
     /* 댓글 삭제 */
     @Transactional
     public void deleteComment(int postId, int commentId) {

@@ -70,17 +70,17 @@
                 <div class="comment">
                     <span class="comment-writer" th:text="${comment.user.nickname}"></span>
                     <div class="comment-content">
-                        <!-- 헤더 영역: 시간과 삭제 버튼 -->
-                        <div class="comment-header">
-                            <span class="comment-time" th:text="${#temporals.format(comment.createdDate, 'yyyy-MM-dd HH:mm:ss')}"></span>
-                            <div class="comment-input" th:if="${#authorization.expression('isAuthenticated()')}">
-                                <button class="delete-comment-btn"
-                                        th:if="${#authentication.principal.id == comment.user.id}"
-                                        th:attr="data-comment-id=${comment.id}">
-                                    삭제
-                                </button>
-                            </div>
+                    <!-- 헤더 영역: 시간과 삭제 버튼 -->
+                    <div class="comment-header">
+                        <span class="comment-time" th:text="${#temporals.format(comment.createdDate, 'yyyy-MM-dd HH:mm:ss')}"></span>
+                        <div class="comment-input" th:if="${#authorization.expression('isAuthenticated()')}">
+                            <button class="delete-comment-btn"
+                                    th:if="${#authentication.principal.id == comment.user.id}"
+                                    th:attr="data-comment-id=${comment.id}">
+                                삭제
+                            </button>
                         </div>
+                    </div>
 
                         <!-- 댓글 내용 -->
                         <p th:text="${comment.content}"></p>

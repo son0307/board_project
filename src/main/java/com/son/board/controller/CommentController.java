@@ -35,8 +35,7 @@ public class CommentController {
 
     @DeleteMapping("/comments/{postId}/{commentId}")
     public ResponseEntity<?> commentDelete(@PathVariable int postId,
-                                           @PathVariable int commentId,
-                                           @AuthenticationPrincipal UserDetailsImpl userDetails) {
+                                           @PathVariable int commentId) {
         commentService.deleteComment(postId, commentId);
 
         return ResponseEntity.ok(Map.of("message", "댓글이 삭제되었습니다."));

@@ -5,16 +5,12 @@ import com.son.board.dto.UserSignUpRequestDto;
 import com.son.board.dto.UserResponseDto;
 import com.son.board.dto.UserUpdateRequestDto;
 import com.son.board.repository.UserRepository;
+import jakarta.persistence.EntityManager;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-import org.springframework.validation.BindingResult;
-import org.springframework.validation.FieldError;
-
-import java.util.HashMap;
-import java.util.Map;
 
 @Slf4j
 @Service
@@ -24,6 +20,7 @@ public class UserService {
     private final UserRepository userRepository;
     private final SecurityContextService securityContextService;
 
+    private final EntityManager entityManger;
     private final BCryptPasswordEncoder encoder;
 
     /* 유저 등록 */
@@ -65,20 +62,12 @@ public class UserService {
         User targetUser = userRepository.findById(userId)
                 .orElseThrow(() -> new IllegalArgumentException(userId + " : 사용자 정보가 없습니다."));
 
-        userRepository.deleteById(userId);
+        userRepository.deleteById(targetUser.getId());
+
+        entityManger.flush();
+        entityManger.clear();
+
         log.info("userId : {} 삭제", userId);
-    }
-
-    @Transactional(readOnly = true)
-    public Map<String, String> validateHandling(BindingResult bindingResult) {
-        Map<String, String> validateResult = new HashMap<>();
-
-        for(FieldError error : bindingResult.getFieldErrors()) {
-            String errorKey = error.getField();
-            validateResult.put(errorKey, error.getDefaultMessage());
-        }
-
-        return validateResult;
     }
 
     /* 아이디, 닉네임 중복 여부 검사 */

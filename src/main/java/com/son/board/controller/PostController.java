@@ -90,13 +90,13 @@ public class PostController {
 
     /* 글쓰기 페이지로 이동 */
     @GetMapping("/post/write")
-    public String moveToWrite(@RequestParam(value = "postId", required = false) String postId,
+    public String moveToWrite(@RequestParam(value = "postId", required = false) Integer postId,
                               Model model) {
         if(Objects.isNull(postId)) {
             model.addAttribute("post", new PostRequestDto());
         }
         else {
-            model.addAttribute("post", postService.findPost(Integer.parseInt(postId)));
+            model.addAttribute("post", postService.findPost(postId));
         }
 
         return "post/write";
@@ -105,13 +105,13 @@ public class PostController {
     /* 새로운 글 등록 */
     @PostMapping("/post/register")
     public ResponseEntity<?> postRegister(@RequestBody PostRequestDto postRequestDto,
-                                          @RequestParam(value = "postId", required = false) String postId,
+                                          @RequestParam(value = "postId", required = false) Integer postId,
                                           @AuthenticationPrincipal UserDetailsImpl userDetails) {
         if(Objects.isNull(postId)) {
             postService.savePost(postRequestDto, userDetails.getUser().getId());
         }
         else {
-            postService.updatePost(postRequestDto, Integer.parseInt(postId));
+            postService.updatePost(postRequestDto, postId);
         }
 
         return ResponseEntity.ok(Map.of("message", "게시글이 등록되었습니다."));
