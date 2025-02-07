@@ -43,6 +43,8 @@ public class CustomOAuth2SuccessHandler implements AuthenticationSuccessHandler 
                     .nickname(snsName)
                     .build();
             httpSession.setAttribute("oauth2Registration", registrationDto);
+            // 경고 메시지도 세션에 저장
+            httpSession.setAttribute("registrationWarning", "회원 정보가 없습니다. 회원 가입을 먼저 해주세요.");
 
             SecurityContextLogoutHandler logoutHandler = new SecurityContextLogoutHandler();
             logoutHandler.setInvalidateHttpSession(false); // 세션 무효화 방지

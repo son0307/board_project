@@ -35,6 +35,14 @@ public class OAuth2Controller {
 
     @GetMapping("/oauth2/signup")
     public String signUp(Model model, HttpSession session) {
+        // 세션에 저장된 경고 메시지가 있는지 확인
+        String registrationWarning = (String) session.getAttribute("registrationWarning");
+        if (registrationWarning != null) {
+            model.addAttribute("registrationWarning", registrationWarning);
+            // 메시지를 모델에 추가한 후 세션에서 제거하여 한 번만 출력되도록 함
+            session.removeAttribute("registrationWarning");
+        }
+
         // OAuth2.0 방식으로 회원가입 시, 세션에서 정보를 가져와 DTO 생성
         OAuth2RegistrationDto oAuth2Registration = (OAuth2RegistrationDto) session.getAttribute("oauth2Registration");
         OAuth2SignUpRequestDto requestDto = new OAuth2SignUpRequestDto();
