@@ -1,6 +1,7 @@
-package com.son.board.oauth2.service;
+package com.son.board.oauth2.util;
 
 import com.son.board.domain.User;
+import com.son.board.oauth2.domain.CustomOAuth2User;
 import com.son.board.oauth2.dto.OAuth2RegistrationDto;
 import com.son.board.repository.UserRepository;
 import com.son.board.service.SecurityContextService;
@@ -10,7 +11,6 @@ import jakarta.servlet.http.HttpServletResponse;
 import jakarta.servlet.http.HttpSession;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.core.Authentication;
-import org.springframework.security.oauth2.core.user.OAuth2User;
 import org.springframework.security.web.authentication.AuthenticationSuccessHandler;
 import org.springframework.security.web.authentication.logout.SecurityContextLogoutHandler;
 import org.springframework.stereotype.Component;
@@ -29,9 +29,9 @@ public class CustomOAuth2SuccessHandler implements AuthenticationSuccessHandler 
     @Override
     public void onAuthenticationSuccess(HttpServletRequest request, HttpServletResponse response,
                                         Authentication authentication) throws IOException, ServletException {
-        // 예: Google의 경우 "sub"가 고유 ID
-        OAuth2User oauth2User = (OAuth2User) authentication.getPrincipal();
-        String oauthId = oauth2User.getAttribute("sub");
+        CustomOAuth2User oAuth2User = (CustomOAuth2User) authentication.getPrincipal();
+        String oauthId = oAuth2User.getId();
+        String snsName = oAuth2User.getNickname();
 
         // 로컬 회원가입 여부 확인 (username 필드가 OAuth2의 고유 ID라고 가정)
         Optional<User> userOptional = userRepository.findByUsername(oauthId);
@@ -40,8 +40,7 @@ public class CustomOAuth2SuccessHandler implements AuthenticationSuccessHandler 
             // (즉, 인증된 상태를 해제)
             OAuth2RegistrationDto registrationDto = OAuth2RegistrationDto.builder()
                     .username(oauthId)
-                    .email(oauth2User.getAttribute("email"))
-                    .nickname(oauth2User.getAttribute("name"))
+                    .nickname(snsName)
                     .build();
             httpSession.setAttribute("oauth2Registration", registrationDto);
 

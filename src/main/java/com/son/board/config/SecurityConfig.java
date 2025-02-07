@@ -1,6 +1,6 @@
 package com.son.board.config;
 
-import com.son.board.oauth2.service.CustomOAuth2SuccessHandler;
+import com.son.board.oauth2.util.CustomOAuth2SuccessHandler;
 import com.son.board.oauth2.service.CustomOAuth2UserService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.boot.autoconfigure.security.servlet.PathRequest;
