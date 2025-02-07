@@ -4,7 +4,6 @@
     <meta charset="UTF-8">
     <title>Board Service</title>
     <link rel="stylesheet" type="text/css" th:href="@{/css/signup.css}">
-    <script src="/script/signup.js" defer></script>
 </head>
 <body>
     <nav th:replace="~{infra/navbar :: navbarFragment}"></nav>
@@ -15,16 +14,19 @@
             <input type="hidden" th:name="${_csrf.parameterName}" th:value="${_csrf.token}"/>
 
             <div class="write-title">
+                <!-- username 필드 -->
                 <label for="username">ID</label><br>
                 <input type="text" id="username" name="username" th:field="*{username}"
                         th:classappend="${#fields.hasErrors('username')} ? 'input-error' : ''">
                 <p th:if="${#fields.hasErrors('username')}" th:errors="*{username}"></p><br>
 
+                <!-- password 필드 -->
                 <label for="password">비밀번호</label><br>
                 <input type="text" id="password" name="password" th:field="*{password}"
                        th:classappend="${#fields.hasErrors('password')} ? 'input-error' : ''">
                 <p th:if="${#fields.hasErrors('password')}" th:errors="*{password}"></p><br>
 
+                <!-- nickname 필드 -->
                 <label for="nickname">닉네임</label><br>
                 <input type="text" id="nickname" name="nickname" th:field="*{nickname}"
                        th:classappend="${#fields.hasErrors('nickname')} ? 'input-error' : ''">

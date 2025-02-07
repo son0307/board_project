@@ -1,0 +1,32 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Board Service</title>
+    <link rel="stylesheet" type="text/css" th:href="@{/css/signup.css}">
+</head>
+<body>
+<nav th:replace="~{infra/navbar :: navbarFragment}"></nav>
+<div class="header"></div>
+<div class="write-detail">
+    <h1>회원 가입</h1>
+    <form id="form" action="/oauth2/signup" th:object="${oAuth2SignUpInput}" method="post">
+        <input type="hidden" th:name="${_csrf.parameterName}" th:value="${_csrf.token}"/>
+
+        <div class="write-title">
+            <!-- username 필드 -->
+            <label for="username">ID</label><br>
+            <input readonly type="text" id="username" name="username" th:value="${oauth2Registration.username}">
+
+            <!-- nickname 필드 -->
+            <label for="nickname">닉네임</label><br>
+            <input type="text" id="nickname" name="nickname" th:field="*{nickname}"
+                   th:classappend="${#fields.hasErrors('nickname')} ? 'input-error' : ''">
+            <p th:if="${#fields.hasErrors('nickname')}" th:errors="*{nickname}"></p>
+        </div>
+
+        <button class="submit-button" type="submit">회원 가입</button>
+    </form>
+</div>
+</body>
+</html>
