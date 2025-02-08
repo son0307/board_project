@@ -25,10 +25,6 @@ public class Comment {
     @Column(nullable = false, columnDefinition = "TEXT")
     private String content;
 
-    @Column(nullable = false)
-    @Builder.Default
-    private int favCount = 0;
-
     @Column(name = "created_date", nullable = false)
     @Builder.Default
     private LocalDateTime createdDate = LocalDateTime.of(2025, 1, 1, 0, 0, 0);
