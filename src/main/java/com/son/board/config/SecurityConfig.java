@@ -1,6 +1,6 @@
 package com.son.board.config;
 
-import com.son.board.oauth2.util.CustomOAuth2SuccessHandler;
+import com.son.board.oauth2.service.CustomOAuth2SuccessHandler;
 import com.son.board.oauth2.service.CustomOAuth2UserService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.boot.autoconfigure.security.servlet.PathRequest;
@@ -44,10 +44,13 @@ public class SecurityConfig {
                         .invalidateHttpSession(true)
                 )
                 .oauth2Login(oauth2 -> oauth2
+                        // 폼 로그인과 동일한 로그인 페이지 사용
                         .loginPage("/login")
+                        // 사용자 정보를 가져오는 엔드포인트 설정
                         .userInfoEndpoint(userInfo -> userInfo
                             .userService(customOAuth2UserService)
                         )
+                        // 인증 성공 후 후처리 로직 핸들러 지정
                         .successHandler(customOAuth2SuccessHandler)
                 );
 

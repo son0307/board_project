@@ -1,6 +1,5 @@
 package com.son.board.oauth2.validator;
 
-import com.son.board.dto.UserSignUpRequestDto;
 import com.son.board.oauth2.dto.OAuth2SignUpRequestDto;
 import com.son.board.repository.UserRepository;
 import com.son.board.validator.AbstractValidator;
